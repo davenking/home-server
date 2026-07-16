@@ -13,10 +13,10 @@ services:
       - "8888:8888"
 
     volumes:
-      - /srv/docker-data/gluetun:/gluetun
+      - ${CONFIG_ROOT}/gluetun:/gluetun
 
     environment:
-      - TZ=Europe/London
+      - TZ=${TZ}
 
 networks:
   default:
