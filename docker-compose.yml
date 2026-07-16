@@ -20,4 +20,4 @@ services:
 
 networks:
   default:
-    name: kingypinas
+    name: kingypi-nas
