@@ -1,0 +1,23 @@
+services:
+
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+
+    cap_add:
+      - NET_ADMIN
+
+    restart: unless-stopped
+
+    ports:
+      - "8888:8888"
+
+    volumes:
+      - /srv/docker-data/gluetun:/gluetun
+
+    environment:
+      - TZ=Europe/London
+
+networks:
+  default:
+    name: kingypinas
