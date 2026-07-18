@@ -66,3 +66,33 @@ The host uses the normal home internet connection while Gluetun traffic exits th
 ## Future use
 
 Containers such as qBittorrent will share the Gluetun network namespace so that loss of VPN connectivity prevents internet access.
+
+---
+
+## Validation - qBittorrent Integration (2026-07-18)
+
+### Implementation
+
+qBittorrent was added to the Docker stack using:
+
+`network_mode: service:gluetun`
+
+This ensures qBittorrent shares Gluetun's network namespace and has no independent internet route.
+
+### Testing performed
+
+- Confirmed Gluetun connects successfully to Proton VPN.
+- Confirmed qBittorrent Web UI is accessible through Gluetun.
+- Stopped Gluetun and confirmed qBittorrent lost network/UI access.
+- Recreated the Docker stack and confirmed qBittorrent recovered.
+- Confirmed qBittorrent configuration persists outside the container.
+
+### Operational note
+
+Restarting Gluetun alone did not restore qBittorrent connectivity because the shared network namespace was not recreated.
+
+Recovery procedure:
+
+```bash
+docker compose down
+docker compose up -d
