@@ -53,3 +53,21 @@ docker restart qbittorrent
 The qBittorrent configuration is persistent in:/srv/docker-data/qbittorrent
 
 so restarting the container does not affect settings or credentials.
+
+
+## Known Issue: Intermittent SSH Reachability
+
+The Pi has demonstrated occasional periods where SSH and ping from Windows clients fail after extended idle periods.
+
+Observations:
+- Pi remains powered and running.
+- Uptime continues normally.
+- Wi-Fi connection remains active.
+- IP address remains unchanged.
+- No wlan0 disconnect events observed in NetworkManager logs.
+- Issue reproduced on a second Raspberry Pi 5.
+
+Current assessment:
+Likely network/router/ARP behaviour rather than Pi hardware or operating system failure.
+
+Further investigation postponed while server build continues.
