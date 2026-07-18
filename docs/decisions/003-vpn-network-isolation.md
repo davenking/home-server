@@ -96,3 +96,32 @@ Recovery procedure:
 ```bash
 docker compose down
 docker compose up -d
+
+# ADR-004: qBittorrent Configuration
+
+## Status
+
+Accepted
+
+## Context
+
+qBittorrent is the BitTorrent client for the home server and operates behind the Gluetun VPN gateway. Its configuration should support future integration with Sonarr, Radarr and other Arr applications.
+
+## Decision
+
+- qBittorrent stores active downloads under `/downloads/incomplete`.
+- Completed downloads are stored under `/downloads/completed`.
+- The corresponding host directories are:
+  - `/srv/media/torrents/incomplete`
+  - `/srv/media/torrents/completed`
+- qBittorrent categories are not created manually.
+- Sonarr and Radarr will create and manage categories during their own configuration.
+- Web UI authentication is enabled with a custom administrator password.
+- Networking configuration remains at the default settings because all network traffic is routed through the Gluetun container.
+
+## Consequences
+
+- Downloads are clearly separated from completed content.
+- Future Arr applications can import completed downloads without interfering with active transfers.
+- Category ownership remains with the application that uses it.
+- qBittorrent remains simple to maintain and replace if required.
