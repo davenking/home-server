@@ -125,3 +125,34 @@ qBittorrent is the BitTorrent client for the home server and operates behind the
 - Future Arr applications can import completed downloads without interfering with active transfers.
 - Category ownership remains with the application that uses it.
 - qBittorrent remains simple to maintain and replace if required.
+
+
+# ADR-005: VPN Kill Switch Validation
+
+## Status
+
+Verified
+
+## Test
+
+The qBittorrent container was tested with the Gluetun VPN gateway intentionally stopped.
+
+## Results
+
+- Stopping Gluetun immediately made the qBittorrent Web UI unavailable.
+- The qBittorrent process remained running.
+- qBittorrent did not retain an independent network interface.
+- Restarting Gluetun restored connectivity.
+- Gluetun public IP confirmed Proton VPN exit address.
+
+## Evidence
+
+qBittorrent network inspection showed:
+
+    NetworkMode: container:<gluetun-container-id>
+
+This confirms qBittorrent shares Gluetun's network namespace and has no direct network path.
+
+## Conclusion
+
+PASS — qBittorrent traffic is isolated behind the Proton VPN gateway. If the VPN connection fails, qBittorrent cannot fall back to the normal home network connection.
