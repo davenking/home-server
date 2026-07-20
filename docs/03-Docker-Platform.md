@@ -1,3 +1,13 @@
+## Goals
+
+The Docker platform aims to provide:
+
+- Repeatable deployments
+- Simple recovery
+- Clear separation of configuration and data
+- Secure network isolation
+- Easy maintenance
+
 # Docker Platform
 
 ## Overview
@@ -70,3 +80,87 @@ PGID=1000
 matching the dave user account.
 
 This avoids unnecessary root-owned files and keeps permissions predictable.
+
+## Current Architecture
+
+Current containers:
+
+- Gluetun
+- qBittorrent
+
+Networking:
+
+Internet
+    │
+    ▼
+ Proton VPN
+    │
+ Gluetun
+    │
+ qBittorrent
+
+qBittorrent uses:
+
+network_mode: "service:gluetun"
+
+This ensures all torrent traffic passes through the VPN.
+
+## Directory Layout
+
+Repository
+
+/srv/home-server
+
+Persistent Docker data
+
+/srv/docker-data
+
+Media
+
+/srv/media
+
+    torrents/
+        completed/
+        incomplete/
+
+
+## Network
+
+The server operates on Ethernet only.
+
+Wi-Fi is disabled to avoid intermittent connectivity issues observed during initial deployment.
+
+IP addressing is currently provided via DHCP.
+
+## Updating Containers
+
+Typical update procedure:
+
+docker compose pull
+
+docker compose up -d
+
+docker image prune
+
+Verify:
+
+docker ps
+
+## Backup Strategy
+
+Current priorities:
+
+- Git repository
+- Docker configuration
+- Application data
+- Media
+
+## Related Documentation
+
+current-state.md
+
+Decision Log
+
+Docker Compose
+
+Storage Layout
