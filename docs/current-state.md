@@ -55,7 +55,7 @@ The qBittorrent configuration is persistent in:/srv/docker-data/qbittorrent
 so restarting the container does not affect settings or credentials.
 
 
-## Known Issue: Intermittent SSH Reachability
+## Network status-Known Issue: Intermittent SSH Reachability
 
 The Pi has demonstrated occasional periods where SSH and ping from Windows clients fail after extended idle periods.
 
@@ -71,3 +71,18 @@ Current assessment:
 Likely network/router/ARP behaviour rather than Pi hardware or operating system failure.
 
 Further investigation postponed while server build continues.
+
+The server is currently operating using Ethernet only.
+
+Previous intermittent connectivity issues were observed when Wi-Fi was enabled alongside Ethernet.
+
+Current configuration:
+
+- Interface: eth0
+- IP address: 192.168.1.217
+- Connection type: Wired
+- DHCP assigned
+
+Wi-Fi has been disabled.
+
+The server has remained stable following this change.

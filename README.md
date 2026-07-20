@@ -27,6 +27,16 @@ The aim of this project is not simply to build a NAS, but to understand every co
 | Drives | 4 × 500 GB SATA drives |
 | RAID | RAID 5 (`mdadm`) |
 | Boot | Raspberry Pi OS Lite (64-bit) |
+---
+
+## Current Services
+
+| Service | Purpose | Status |
+|---------|---------|--------|
+| Docker | Container platform | ✅ |
+| Docker Compose | Service management | ✅ |
+| Gluetun | Proton VPN gateway | ✅ |
+| qBittorrent | Torrent client via VPN | ✅ |
 
 ---
 
@@ -47,13 +57,14 @@ The aim of this project is not simply to build a NAS, but to understand every co
 ---
 
 ## Project Status
-
 | Phase | Status |
 |------|:------:|
 | Raspberry Pi Installation | ✅ |
 | RAID Storage | ✅ |
-| Git Repository | 🚧 |
-| Docker | ⏳ |
+| Git Repository | ✅ |
+| Docker Platform | ✅ |
+| Gluetun VPN Gateway | ✅ |
+| qBittorrent | ✅ |
 | Media Stack | ⏳ |
 | Website | ⏳ |
 | Monitoring | ⏳ |

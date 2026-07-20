@@ -38,7 +38,7 @@ Docker:
 
 ### Single Compose File
 
-The project will use a single compose.yaml file.
+The project will use a single docker-compose.yaml file.
 
 Reasons:
 
@@ -128,9 +128,32 @@ Media
 
 The server operates on Ethernet only.
 
+Current configuration:
+
+- Interface: Ethernet (eth0)
+- IP address: 192.168.1.217
+- Address assignment: DHCP
+
 Wi-Fi is disabled to avoid intermittent connectivity issues observed during initial deployment.
 
-IP addressing is currently provided via DHCP.
+The server has remained stable following this change.
+
+## VPN Isolation
+
+qBittorrent runs using:
+
+network_mode: "service:gluetun"
+
+This means qBittorrent does not have its own network interface.
+
+All traffic must pass through Gluetun.
+
+If Gluetun stops:
+
+- qBittorrent Web UI becomes unavailable.
+- Torrent traffic cannot continue outside the VPN tunnel.
+
+The VPN kill switch has been tested successfully.
 
 ## Updating Containers
 
