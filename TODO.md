@@ -3,23 +3,24 @@
 ## Phase 1
 - [x] Install Raspberry Pi OS
 - [x] Configure SSH
-- [x] Configure Static IP
+- [x] Configure Ethernet networking
 - [x] Configure RAID 5
 - [x] Mount RAID
 
 ## Phase 2
-- [ ] Install Docker
-- [ ] Install Docker Compose
-- [ ] Create Docker directory layout
-- [ ] Configure environment variables
+- [x] Install Docker
+- [x] Install Docker Compose
+- [x] Create Docker directory layout
+- [x] Configure environment variables
 
 ## Phase 3
 - [ ] Install Jellyfin
 - [ ] Install Sonarr
 - [ ] Install Radarr
 - [ ] Install Prowlarr
-- [ ] Install qBittorrent
-- [ ] Install Gluetun
+- [x] Install qBittorrent
+- [x] Install Gluetun
+
 
 ## Phase 4
 - [ ] Personal website
@@ -29,3 +30,4 @@
 ## Phase 5
 - [ ] Backup strategy
 - [ ] Disaster recovery testing
+- [ ] Monitoring and alerting
