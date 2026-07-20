@@ -156,3 +156,7 @@ This confirms qBittorrent shares Gluetun's network namespace and has no direct n
 ## Conclusion
 
 PASS — qBittorrent traffic is isolated behind the Proton VPN gateway. If the VPN connection fails, qBittorrent cannot fall back to the normal home network connection.
+
+
+Decision: Raspberry Pi server operates on Ethernet only.
+Reason: Repeated intermittent SSH and service connectivity issues disappeared after removing Wi-Fi and running exclusively over Ethernet. The issue was reproducible across two Raspberry Pi 5 devices, suggesting a network/interface interaction rather than hardware failure.
