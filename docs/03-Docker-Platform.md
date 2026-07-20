@@ -87,8 +87,15 @@ Current containers:
 
 - Gluetun
 - qBittorrent
+- Prowlarr
+
+Prowlarr provides centralised indexer management for future media automation services.
+
+Prowlarr does not require VPN routing because it does not participate in BitTorrent traffic.
 
 Networking:
+
+Torrent traffic
 
 Internet
     │
@@ -104,6 +111,20 @@ qBittorrent uses:
 network_mode: "service:gluetun"
 
 This ensures all torrent traffic passes through the VPN.
+
+Application network:
+
+Prowlarr communicates with future media services using the Docker network:
+
+kingypi-nas
+
+Future:
+
+Prowlarr
+    │
+    ├── Sonarr
+    │
+    └── Radarr
 
 ## Directory Layout
 

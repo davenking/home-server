@@ -48,6 +48,23 @@ services:
       - ${CONFIG_ROOT}/qbittorrent:/config
       - ${MEDIA_ROOT}/torrents:/downloads
 
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+
+    restart: unless-stopped
+
+    ports:
+      - "9696:9696"
+
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+
+    volumes:
+      - ${CONFIG_ROOT}/prowlarr:/config
+
 networks:
   default:
     name: kingypi-nas

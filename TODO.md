@@ -17,7 +17,7 @@
 - [ ] Install Jellyfin
 - [ ] Install Sonarr
 - [ ] Install Radarr
-- [ ] Install Prowlarr
+- [x] Install Prowlarr
 - [x] Install qBittorrent
 - [x] Install Gluetun
 
