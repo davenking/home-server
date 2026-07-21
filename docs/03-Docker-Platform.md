@@ -1,210 +1,102 @@
-## Goals
+# KingyPiNAS Current State
 
-The Docker platform aims to provide:
+Date: 2026-07-20
 
-- Repeatable deployments
-- Simple recovery
-- Clear separation of configuration and data
-- Secure network isolation
-- Easy maintenance
+## Platform Status
 
-# Docker Platform
+The platform has reached a stable baseline.
 
-## Overview
+The Raspberry Pi server is operating reliably using Ethernet-only networking.
 
-KingyPiNAS uses Docker to provide isolated, repeatable services.
-
-Docker allows applications to be installed, updated and removed without affecting the base operating system.
-
-## Platform
-
-Hardware:
-
-- Raspberry Pi 5 Model B Rev 1.1
-- Radxa Penta SATA HAT
-- 4 x 500GB SATA drives
-
-Operating System:
-
-- Raspberry Pi OS Lite 64-bit
-- Debian Trixie
-
-Docker:
-
-- Docker Engine 26.1.5
-- Docker Compose 2.26.1
-
-## Design Decisions
-
-### Single Compose File
-
-The project will use a single docker-compose.yaml file.
-
-Reasons:
-
-- Easier maintenance
-- Easier backup
-- Easier rebuild after failure
-- One place to understand the complete system
-
-### Separation of Configuration and Data
-
-Git repository:
-
-/srv/home-server
-
-Contains:
-
-- Documentation
-- Docker Compose files
-- Scripts
-- Diagrams
-
-Persistent application data:
-
-/srv/docker-data
-
-Media storage:
-
-/srv/media
-
-This separation improves disaster recovery.
-
-## User Permissions
-
-Containers will normally run using:
-
-PUID=1000  
-PGID=1000
-
-matching the dave user account.
-
-This avoids unnecessary root-owned files and keeps permissions predictable.
-
-## Current Architecture
-
-Current containers:
+## Working Services
 
 - Gluetun
+  - Proton VPN WireGuard
+  - Healthy
+  - Provides VPN gateway for qBittorrent
+
 - qBittorrent
+  - Runs through the Gluetun network namespace
+  - Web UI secured
+  - Configuration stored in `/srv/docker-data/qbittorrent`
+
 - Prowlarr
+  - Running as a Docker container
+  - Web UI available on port `9696`
+  - Configuration stored in `/srv/docker-data/prowlarr`
+  - Provides centralised indexer management for future media services
 
-Prowlarr provides centralised indexer management for future media automation services.
-
-Prowlarr does not require VPN routing because it does not participate in BitTorrent traffic.
-
-Networking:
-
-Torrent traffic
-
-Internet
-    │
-    ▼
- Proton VPN
-    │
- Gluetun
-    │
- qBittorrent
-
-qBittorrent uses:
-
-network_mode: "service:gluetun"
-
-This ensures all torrent traffic passes through the VPN.
-
-Application network:
-
-Prowlarr communicates with future media services using the Docker network:
-
-kingypi-nas
-
-Future:
-
-Prowlarr
-    │
-    ├── Sonarr
-    │
-    └── Radarr
-
-## Directory Layout
-
-Repository
-
-/srv/home-server
-
-Persistent Docker data
-
-/srv/docker-data
-
-Media
-
-/srv/media
-
-    torrents/
-        completed/
-        incomplete/
-
-
-## Network
-
-The server operates on Ethernet only.
+## Networking
 
 Current configuration:
 
-- Interface: Ethernet (eth0)
-- IP address: 192.168.1.217
-- Address assignment: DHCP
+- Ethernet only
+- Wi-Fi disabled
+- IP address: `192.168.1.217`
+- DHCP provided by BT Smart Hub 2
 
-Wi-Fi is disabled to avoid intermittent connectivity issues observed during initial deployment.
+Previous intermittent SSH connectivity issues occurred when both Wi-Fi and Ethernet were active.
 
-The server has remained stable following this change.
+Moving to Ethernet-only networking has resolved the issue during extended testing.
 
-## VPN Isolation
+## Docker Status
 
-qBittorrent runs using:
+Validation completed:
 
+- Containers restart successfully after reboot
+- Gluetun reports healthy
+- qBittorrent reconnects correctly
+- Prowlarr starts automatically
+- Configuration persists after restart
+
+## Validation Completed
+
+- Confirmed Pi public IP differs from VPN IP
+- Confirmed Gluetun health
+- Confirmed qBittorrent cannot operate without VPN
+- Confirmed configuration survives container recreation
+- Confirmed Docker services survive reboot
+
+## Gluetun and qBittorrent Recovery
+
+qBittorrent uses the Gluetun container network namespace:
+
+```text
 network_mode: "service:gluetun"
+```
 
-This means qBittorrent does not have its own network interface.
+This means qBittorrent depends on Gluetun for all network connectivity.
 
-All traffic must pass through Gluetun.
+If Gluetun is stopped and restarted, qBittorrent may require a restart to restore Web UI access.
 
-If Gluetun stops:
+Recovery sequence:
 
-- qBittorrent Web UI becomes unavailable.
-- Torrent traffic cannot continue outside the VPN tunnel.
-
-The VPN kill switch has been tested successfully.
-
-## Updating Containers
-
-Typical update procedure:
-
-docker compose pull
-
-docker compose up -d
-
-docker image prune
-
-Verify:
+```bash
+docker restart gluetun
 
 docker ps
 
-## Backup Strategy
+docker restart qbittorrent
+```
 
-Current priorities:
+The qBittorrent configuration is stored in:
 
-- Git repository
-- Docker configuration
-- Application data
-- Media
+`/srv/docker-data/qbittorrent`
 
-## Related Documentation
+so restarting the container does not affect settings or credentials.
 
-current-state.md
+## Git Status
 
-Decision Log
+- Repository clean
+- Changes pushed to GitHub
+- Documentation maintained under version control
 
-Docker Compose
+## Next Steps
 
-Storage Layout
+- Deploy Sonarr
+- Deploy Radarr
+- Deploy Jellyfin
+- Storage organisation
+- Monitoring
+- Backup strategy
+- Disaster recovery testing

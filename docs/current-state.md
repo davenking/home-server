@@ -1,18 +1,30 @@
 # KingyPiNAS Current State
 
-Date: 2026-07-18
+Date: 2026-07-20
+
+## Platform Status
+
+The platform has reached a stable baseline.
+
+The Raspberry Pi server is operating reliably using Ethernet-only networking.
 
 ## Working Services
 
 - Gluetun
   - Proton VPN WireGuard
   - Healthy
-  - Provides network gateway
+  - Provides VPN gateway for qBittorrent
 
 - qBittorrent
   - Runs through Gluetun network namespace
   - Web UI secured
   - Configuration stored in /srv/docker-data/qbittorrent
+
+- Prowlarr
+  - Running as Docker container
+  - Web UI available on port 9696
+  - Configuration stored in /srv/docker-data/prowlarr
+  - Provides centralised indexer management for future media services
 
 ## Validation Completed
 
@@ -38,6 +50,47 @@ This means qBittorrent depends on Gluetun for all network connectivity.
 
 If Gluetun is stopped and restarted, qBittorrent may require a restart to restore Web UI access.
 
+## Networking
+
+Current configuration:
+
+- Ethernet only
+- Wi-Fi disabled
+- IP address: 192.168.1.217
+- DHCP provided by BT Smart Hub 2
+
+Previous intermittent SSH connectivity issues occurred when both Wi-Fi and Ethernet were active.
+
+Moving to Ethernet-only networking has resolved the issue during extended testing.
+
+## Docker Status
+
+Validation completed:
+
+- Containers restart successfully after reboot
+- Gluetun reports healthy
+- qBittorrent reconnects correctly
+- Prowlarr starts automatically
+- Configuration persists after restart
+
+## Validation Completed
+
+- Confirmed Pi public IP differs from VPN IP
+- Confirmed Gluetun health
+- Confirmed qBittorrent cannot operate without VPN
+- Confirmed configuration survives container recreation
+- Confirmed Docker services survive reboot
+
+## Gluetun and qBittorrent Recovery
+
+qBittorrent uses the Gluetun container network namespace:
+
+    network_mode: "service:gluetun"
+
+This means qBittorrent depends on Gluetun for all network connectivity.
+
+If Gluetun is stopped and restarted, qBittorrent may require a restart to restore Web UI access.
+
 Recovery sequence:
 
 ```bash
@@ -48,41 +101,25 @@ Wait until Gluetun reports healthy:
 docker ps
 
 Then restart qBittorrent:
+
 docker restart qbittorrent
 
 The qBittorrent configuration is persistent in:/srv/docker-data/qbittorrent
 
 so restarting the container does not affect settings or credentials.
 
+Git Status
+Repository clean
+Changes pushed to GitHub
+Documentation maintained under version control
 
-## Network status-Known Issue: Intermittent SSH Reachability
+Next Steps
+Deploy Sonarr
+Deploy Radarr
+Deploy Jellyfin
+Storage organisation
+Monitoring
+Backup strategy
+Disaster recovery testing
 
-The Pi has demonstrated occasional periods where SSH and ping from Windows clients fail after extended idle periods.
 
-Observations:
-- Pi remains powered and running.
-- Uptime continues normally.
-- Wi-Fi connection remains active.
-- IP address remains unchanged.
-- No wlan0 disconnect events observed in NetworkManager logs.
-- Issue reproduced on a second Raspberry Pi 5.
-
-Current assessment:
-Likely network/router/ARP behaviour rather than Pi hardware or operating system failure.
-
-Further investigation postponed while server build continues.
-
-The server is currently operating using Ethernet only.
-
-Previous intermittent connectivity issues were observed when Wi-Fi was enabled alongside Ethernet.
-
-Current configuration:
-
-- Interface: eth0
-- IP address: 192.168.1.217
-- Connection type: Wired
-- DHCP assigned
-
-Wi-Fi has been disabled.
-
-The server has remained stable following this change.
