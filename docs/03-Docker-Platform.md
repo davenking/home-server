@@ -26,6 +26,12 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Configuration stored in `/srv/docker-data/prowlarr`
   - Provides centralised indexer management for future media services
 
+-Sonarr
+  -Running as a docker container
+  -Web UI available on port '8989
+  -Configuration stored in `/srv/docker-data/Sonarr`
+  -Manages TV series and monitors the download directory.
+
 ## Networking
 
 Current configuration:

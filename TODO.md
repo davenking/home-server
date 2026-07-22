@@ -15,7 +15,7 @@
 
 ## Phase 3
 - [ ] Install Jellyfin
-- [ ] Install Sonarr
+- [x] Install Sonarr
 - [ ] Install Radarr
 - [x] Install Prowlarr
 - [x] Install qBittorrent

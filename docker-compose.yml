@@ -65,6 +65,25 @@ services:
     volumes:
       - ${CONFIG_ROOT}/prowlarr:/config
 
+  sonarr:
+   image: lscr.io/linuxserver/sonarr:latest
+   container_name: sonarr
+
+   restart: unless-stopped
+
+   ports:
+     - "8989:8989"
+
+   environment:
+     - TZ=${TZ}
+     - PUID=${PUID}
+     - PGID=${PGID}
+
+   volumes:
+     - ${CONFIG_ROOT}/sonarr:/config
+     - ${MEDIA_ROOT}/tv:/tv
+     - ${MEDIA_ROOT}/torrents:/downloads
+
 networks:
   default:
     name: kingypi-nas
