@@ -91,6 +91,7 @@ so restarting the container does not affect settings or credentials.
 - Changes pushed to GitHub
 - Documentation maintained under version control
 
+
 ## Next Steps
 
 - Deploy Sonarr
