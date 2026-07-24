@@ -27,9 +27,11 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Provides centralised indexer management for future media services
 
 - Sonarr
-  -Running as Docker container
+  - Running as Docker container
   - Web UI available on port 8989
   - Configuration stored in /srv/docker-data/sonarr
+  - Connected to Prowlarr for indexer management
+  - Connected to qBittorrent for downloads
   - manages TV series and monitors the download directory.
 
 ## Validation Completed

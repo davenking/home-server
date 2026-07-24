@@ -26,11 +26,13 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Configuration stored in `/srv/docker-data/prowlarr`
   - Provides centralised indexer management for future media services
 
--Sonarr
-  -Running as a docker container
-  -Web UI available on port '8989
-  -Configuration stored in `/srv/docker-data/Sonarr`
-  -Manages TV series and monitors the download directory.
+- Sonarr
+  - Running as a docker container
+  - Web UI available on port '8989
+  - Configuration stored in `/srv/docker-data/Sonarr`
+  - Manages TV series and monitors the download directory.
+  - Connected to Prowlarr for indexer management
+  - Connected to qBittorrent for downloads 
 
 ## Networking
 
@@ -49,19 +51,52 @@ Moving to Ethernet-only networking has resolved the issue during extended testin
 
 Validation completed:
 
+- Confirmed Pi public IP differs from VPN IP
 - Containers restart successfully after reboot
 - Gluetun reports healthy
 - qBittorrent reconnects correctly
 - Prowlarr starts automatically
+- Sonarr starts automatically
 - Configuration persists after restart
+
+## Media Automation Architecture
+
+Current workflow:
+
+Prowlarr
+    │
+    ▼
+Sonarr
+    │
+    ▼
+qBittorrent
+    │
+    ▼
+Media library
+
+Notes:
+
+- Prowlarr manages indexers and synchronises them with media applications.
+- Sonarr manages TV automation.
+- Sonarr sends download requests to qBittorrent.
+- qBittorrent runs through Gluetun using:
+
+      network_mode: "service:gluetun"
+
+- Sonarr connects to qBittorrent through:
+
+      http://gluetun:8080
+
+because qBittorrent shares Gluetun's network namespace.
 
 ## Validation Completed
 
-- Confirmed Pi public IP differs from VPN IP
 - Confirmed Gluetun health
 - Confirmed qBittorrent cannot operate without VPN
 - Confirmed configuration survives container recreation
 - Confirmed Docker services survive reboot
+
+
 
 ## Gluetun and qBittorrent Recovery
 
