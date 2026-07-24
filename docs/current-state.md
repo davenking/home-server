@@ -34,6 +34,14 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Connected to qBittorrent for downloads
   - manages TV series and monitors the download directory.
 
+- Radarr
+  - Running as Docker container
+  - Web UI available on port 7878
+  - Configuration stored in /srv/docker-data/radarr
+  - Connected to Prowlarr for indexer management
+  - Connected to qBittorrent for downloads
+  - manages Movies and monitors the download directory.
+
 ## Validation Completed
 
 - Confirmed Pi public IP differs from VPN IP
@@ -79,6 +87,7 @@ Validation completed:
 - Gluetun reports healthy
 - qBittorrent reconnects correctly
 - Prowlarr starts automatically
+- Radarr starts automatically 
 - Configuration persists after restart
 
 ## Validation Completed

@@ -34,6 +34,14 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Connected to Prowlarr for indexer management
   - Connected to qBittorrent for downloads 
 
+- Sonarr
+  - Running as a docker container
+  - Web UI available on port 7878
+  - Configuration stored in `/srv/docker-data/Radarr`
+  - Manages TV series and monitors the download directory.
+  - Connected to Prowlarr for indexer management
+  - Connected to qBittorrent for downloadsRadarr
+
 ## Networking
 
 Current configuration:
@@ -57,6 +65,7 @@ Validation completed:
 - qBittorrent reconnects correctly
 - Prowlarr starts automatically
 - Sonarr starts automatically
+- Radarr starts automatically
 - Configuration persists after restart
 
 ## Media Automation Architecture
@@ -66,13 +75,27 @@ Current workflow:
 Prowlarr
     │
     ▼
-Sonarr
+Sonarr - Radarr
     │
     ▼
 qBittorrent
     │
     ▼
 Media library
+
+	         Prowlarr
+                 /      \
+                /        \
+           Sonarr      Radarr
+               \         /
+                \       /
+             qBittorrent
+                  |
+               Gluetun VPN
+                  |
+               Internet
+
+
 
 Notes:
 

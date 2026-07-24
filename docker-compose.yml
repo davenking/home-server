@@ -84,6 +84,26 @@ services:
      - ${MEDIA_ROOT}/tv:/tv
      - ${MEDIA_ROOT}/torrents:/downloads
 
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+
+    restart: unless-stopped
+
+    ports:
+      - "7878:7878"
+
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+
+    volumes:
+      - ${CONFIG_ROOT}/radarr:/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${MEDIA_ROOT}/torrents:/downloads
+
+
 networks:
   default:
     name: kingypi-nas

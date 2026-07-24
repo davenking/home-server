@@ -16,7 +16,7 @@
 ## Phase 3
 - [ ] Install Jellyfin
 - [x] Install Sonarr
-- [ ] Install Radarr
+- [x] Install Radarr
 - [x] Install Prowlarr
 - [x] Install qBittorrent
 - [x] Install Gluetun
