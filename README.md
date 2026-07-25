@@ -2,96 +2,245 @@
 
 A Raspberry Pi 5 based home server built from scratch as a learning project.
 
-The aim of this project is not simply to build a NAS, but to understand every component, document every decision, and create a system that can be rebuilt from scratch if required.
+The aim of this project is to create a reliable, documented, and easily recoverable NAS and media server while learning:
+
+- Linux system administration
+- RAID storage management
+- Docker and Docker Compose
+- Self-hosted services
+- Media management
+- Backup and recovery practices
+
+The project deliberately avoids all-in-one NAS distributions such as CasaOS in favour of understanding and controlling each component.
 
 ---
 
-## Objectives
+# Hardware
 
-- Learn Linux system administration
-- Learn RAID using `mdadm`
-- Learn Docker and Docker Compose
-- Build a reliable media server
-- Document every step
-- Keep all configuration under version control
-- Make disaster recovery straightforward
+## Server
 
----
+- Raspberry Pi 5 Model B Rev 1.1
+- Radxa Penta SATA HAT
+- 4 × 500GB SATA drives
+- Raspberry Pi OS Lite (64-bit)
 
-## Hardware
+## Storage
 
-| Component | Details |
-|----------|---------|
-| Computer | Raspberry Pi 5 |
-| Storage HAT | Radxa Penta SATA HAT |
-| Drives | 4 × 500 GB SATA drives |
-| RAID | RAID 5 (`mdadm`) |
-| Boot | Raspberry Pi OS Lite (64-bit) |
----
-
-## Current Services
-
-| Service | Purpose | Status |
-|---------|---------|--------|
-| Docker | Container platform | ✅ |
-| Docker Compose | Service management | ✅ |
-| Gluetun | Proton VPN gateway | ✅ |
-| qBittorrent | Torrent client via VPN | ✅ |
+- RAID 5 using `mdadm`
+- Filesystem: ext4
+- RAID mount point:
 
 ---
 
-## Planned Services
+/srv Storage label: NAS
 
-- Docker
-- Docker Compose
-- Jellyfin
-- Sonarr
-- Radarr
-- Prowlarr
-- qBittorrent
-- Gluetun
-- Cloudflare Tunnel
-- Personal Website
-- SW Reservoir Data Project
 
 ---
 
-## Project Status
-| Phase | Status |
-|------|:------:|
-| Raspberry Pi Installation | ✅ |
-| RAID Storage | ✅ |
-| Git Repository | ✅ |
-| Docker Platform | ✅ |
-| Gluetun VPN Gateway | ✅ |
-| qBittorrent | ✅ |
-| Media Stack | ⏳ |
-| Website | ⏳ |
-| Monitoring | ⏳ |
-| Backup Strategy | ⏳ |
+# Project Objectives
+
+- Build a reliable home server from scratch
+- Learn Linux administration
+- Learn RAID management
+- Containerise services using Docker
+- Keep all configuration documented
+- Store configuration in Git
+- Make recovery from hardware failure straightforward
+- Provide family-friendly media access
+- Preserve personal family archives
 
 ---
 
-## Project Philosophy
+# Current Status
 
-This server is being built slowly and methodically.
+The server has reached a stable baseline.
 
-Every change should be:
+## Completed
 
-1. Planned
-2. Documented
-3. Tested
-4. Committed to Git
-
-The objective is to understand the system, not simply make it work.
+✅ Raspberry Pi operating reliably  
+✅ Ethernet-only networking configured  
+✅ RAID 5 storage created and mounted  
+✅ Docker platform configured  
+✅ Configuration stored in Git  
+✅ VPN gateway configured  
+✅ Download automation working  
 
 ---
 
-## Future Projects
+# Currently Running Services
 
-This server will eventually host several related projects.
+## Gluetun
 
-- **KingyPiNAS** – Infrastructure
-- **KingyPiWeb** – Personal website
-- **KingyReservoirs** – Reservoir monitoring and charts
-- **Family Archive** – Home movies and digitised cine films
+Purpose:
+- VPN gateway for services requiring protected traffic
+
+Status:
+- Running
+- Proton VPN WireGuard configured
+- Health checks enabled
+
+---
+
+## qBittorrent
+
+Purpose:
+- Torrent download client
+
+Status:
+- Running through Gluetun VPN
+
+Configuration:
+- /srv/docker-data/qbittorrent
+
+Downloads:
+- /srv/media/torrents
+
+
+---
+
+## Prowlarr
+
+Purpose:
+- Indexer management
+
+Status:
+- Running
+
+Configuration:
+- /srv/docker-data/prowlarr
+
+
+---
+
+## Sonarr
+
+Purpose:
+- Automated TV series management
+
+Status:
+- Running
+
+Configuration:
+- /srv/docker-data/sonarr
+
+Media library:
+- /srv/media/tv
+
+
+---
+
+# Planned Services
+
+## Radarr
+
+Purpose:
+- Automated movie management
+
+Planned configuration:
+- /srv/docker-data/radarr
+
+Movie library:
+- /srv/media/movies
+
+
+---
+
+## Jellyfin
+
+Purpose:
+- Family media server
+
+Planned libraries:
+
+### Movies
+
+- /srv/media/movies
+
+### TV
+- /srv/media/tv
+
+### Home Movies
+
+Digitised personal cine films:
+- /srv/media/home-movies
+
+
+### Family Archive
+
+Family audio-visual projects created by my parents:
+- /srv/media/family-av
+
+
+---
+
+# Media Storage Layout
+
+Current and planned layout:
+- /srv/media
+
+├── movies
+│
+├── tv
+│
+├── home-movies
+│
+├── family-av
+│
+└── torrents
+    ├── completed
+    └── incomplete
+
+---
+
+# Docker Layout
+
+Docker persistent data:
+- /srv/docker-data
+
+├── gluetun
+├── qbittorrent
+├── prowlarr
+├── sonarr
+├── radarr
+├── jellyfin
+└── cloudflare
+
+
+---
+
+# Documentation
+
+Additional documentation is stored in:
+- docs/
+
+
+Including:
+
+- Architecture decisions
+- Docker configuration
+- Current system state
+- Recovery procedures
+
+---
+
+# Future Plans
+
+Possible future additions:
+
+- Jellyfin deployment
+- Radarr deployment
+- Cloudflare tunnel
+- Monitoring dashboard
+- Temperature monitoring
+- Automated backups
+- Physical case design
+- Personal website hosting
+- Additional home automation projects
+
+---
+
+# Philosophy
+
+The goal of KingyPiNAS is not simply to run services.
+
+The goal is to understand how the system works, document decisions, and create a server that can be rebuilt and maintained confidently.
