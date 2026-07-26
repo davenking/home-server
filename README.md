@@ -129,21 +129,20 @@ Media library:
 
 ---
 
-# Planned Services
-
 ## Radarr
 
 Purpose:
 - Automated movie management
 
-Planned configuration:
+Configuration:
 - /srv/docker-data/radarr
 
 Movie library:
 - /srv/media/movies
 
-
 ---
+
+# Planned Services
 
 ## Jellyfin
 
@@ -228,7 +227,6 @@ Including:
 Possible future additions:
 
 - Jellyfin deployment
-- Radarr deployment
 - Cloudflare tunnel
 - Monitoring dashboard
 - Temperature monitoring

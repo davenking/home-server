@@ -1,6 +1,6 @@
 # KingyPiNAS Current State
 
-Date: 2026-07-20
+Date: 2026-07-26
 
 ## Platform Status
 
@@ -34,13 +34,13 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Connected to Prowlarr for indexer management
   - Connected to qBittorrent for downloads 
 
-- Sonarr
+- Radarr
   - Running as a docker container
   - Web UI available on port 7878
   - Configuration stored in `/srv/docker-data/Radarr`
-  - Manages TV series and monitors the download directory.
+  - Manages Movies and monitors the download directory.
   - Connected to Prowlarr for indexer management
-  - Connected to qBittorrent for downloadsRadarr
+  - Connected to qBittorrent for downloads
 
 ## Networking
 
@@ -86,10 +86,10 @@ Media library
 	         Prowlarr
                  /      \
                 /        \
-           Sonarr      Radarr
+            Sonarr      Radarr
                \         /
                 \       /
-             qBittorrent
+              qBittorrent
                   |
                Gluetun VPN
                   |
@@ -125,7 +125,7 @@ because qBittorrent shares Gluetun's network namespace.
 
 qBittorrent uses the Gluetun container network namespace:
 
-```text
+```
 network_mode: "service:gluetun"
 ```
 
@@ -135,7 +135,7 @@ If Gluetun is stopped and restarted, qBittorrent may require a restart to restor
 
 Recovery sequence:
 
-```bash
+```
 docker restart gluetun
 
 docker ps
@@ -158,8 +158,8 @@ so restarting the container does not affect settings or credentials.
 
 ## Next Steps
 
-- Deploy Sonarr
-- Deploy Radarr
+- Deploy Sonarr (completed)
+- Deploy Radarr (completed)
 - Deploy Jellyfin
 - Storage organisation
 - Monitoring

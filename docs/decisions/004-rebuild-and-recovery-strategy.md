@@ -1,6 +1,6 @@
 # Decision 004 - Rebuild and Recovery Strategy
 
-Date: 2026-07-17
+Date: 2026-07-26
 
 ## Decision
 
@@ -46,6 +46,7 @@ contains:
 - Movies
 - TV
 - Home movies
+- Family AV's
 - Torrents
 
 ## Reason

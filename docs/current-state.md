@@ -1,6 +1,6 @@
 # KingyPiNAS Current State
 
-Date: 2026-07-20
+Date: 2026-07-26
 
 ## Platform Status
 
@@ -110,7 +110,7 @@ If Gluetun is stopped and restarted, qBittorrent may require a restart to restor
 
 Recovery sequence:
 
-```bash
+```
 docker restart gluetun
 
 Wait until Gluetun reports healthy:
@@ -131,8 +131,8 @@ Changes pushed to GitHub
 Documentation maintained under version control
 
 Next Steps
-Deploy Sonarr
-Deploy Radarr
+Deploy Sonarr (completed)
+Deploy Radarr (completed)
 Deploy Jellyfin
 Storage organisation
 Monitoring
