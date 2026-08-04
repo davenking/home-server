@@ -7,3 +7,7 @@
 
 # macOS
 .DS_Store
+
+# Local recovery backups — may contain credentials
+backups/*.tar.gz
+backups/docker-compose.yml.*
