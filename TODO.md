@@ -14,7 +14,7 @@
 - [x] Configure environment variables
 
 ## Phase 3
-- [ ] Install Jellyfin
+- [x] Install Jellyfin
 - [x] Install Sonarr
 - [x] Install Radarr
 - [x] Install Prowlarr
@@ -27,7 +27,32 @@
 - [ ] Reservoir scraper
 - [ ] Cloudflare Tunnel
 
-## Phase 5
+## Phase 5 - Physical build
+- [ ] Design Raspberry Pi NAS enclosure
+- [ ] Consider airflow requirements
+- [ ] Design drive mounting solution
+- [ ] Design cable management
+- [ ] 3D print prototype
+- [ ] Test temperatures under load
+- [ ] Final print and assembly
+
+## Phase 6 - Reliability
 - [ ] Backup strategy
 - [ ] Disaster recovery testing
 - [ ] Monitoring and alerting
+
+## Future improvements
+
+- [ ] Evaluate moving Prowlarr behind Gluetun VPN
+      - Reason: consistent VPN routing for indexer traffic
+      - Risk: Docker networking changes
+      - Test required: Sonarr/Radarr ↔ Prowlarr communication
+
+## Monitoring and alerting
+
+- [ ] Monitor Raspberry Pi CPU temperature
+- [ ] Monitor SATA drive temperatures
+- [ ] Monitor RAID health
+- [ ] Monitor Docker container status
+- [ ] Create server dashboard
+- [ ] Add temperature/failure alerts

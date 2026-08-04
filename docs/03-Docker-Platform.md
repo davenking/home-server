@@ -1,6 +1,6 @@
 # KingyPiNAS Current State
 
-Date: 2026-07-26
+Date: 2026-07-29
 
 ## Platform Status
 
@@ -42,6 +42,22 @@ The Raspberry Pi server is operating reliably using Ethernet-only networking.
   - Connected to Prowlarr for indexer management
   - Connected to qBittorrent for downloads
 
+- Jellyfin
+  - Running as a Docker container
+  - Web UI available on port 8096
+  - Configuration stored in `/srv/docker-data/jellyfin`
+  - Libraries:
+      - Movies
+      - TV
+      - Home Movies
+      - Family AV
+  - Remote access provided through Cloudflare Tunnel
+
+- Cloudflared
+  - Running as a Docker container
+  - Authenticated Cloudflare Tunnel
+  - Provides secure remote access without port forwarding
+
 ## Networking
 
 Current configuration:
@@ -60,13 +76,13 @@ Moving to Ethernet-only networking has resolved the issue during extended testin
 Validation completed:
 
 - Confirmed Pi public IP differs from VPN IP
-- Containers restart successfully after reboot
-- Gluetun reports healthy
-- qBittorrent reconnects correctly
-- Prowlarr starts automatically
-- Sonarr starts automatically
-- Radarr starts automatically
-- Configuration persists after restart
+Containers generally restart successfully after reboot.
+
+Observed:
+- One unexpected reboot (2026-07-29)
+- qBittorrent required manual restart following that reboot
+- No configuration fault identified
+- Monitoring for recurrence
 
 ## Media Automation Architecture
 
@@ -83,18 +99,21 @@ qBittorrent
     ▼
 Media library
 
-	         Prowlarr
-                 /      \
-                /        \
-            Sonarr      Radarr
-               \         /
-                \       /
-              qBittorrent
+                Prowlarr
+                /      \
+               /        \
+         Sonarr        Radarr
+              \         /
+               \       /
+            qBittorrent
                   |
-               Gluetun VPN
+              Gluetun VPN
                   |
-               Internet
-
+             Downloaded Media
+                  |
+              Jellyfin
+                  |
+         Local & Remote Users
 
 
 Notes:
@@ -155,13 +174,42 @@ so restarting the container does not affect settings or credentials.
 - Changes pushed to GitHub
 - Documentation maintained under version control
 
+## Operational Notes
+
+Unexpected reboot investigated on 2026-07-29.
+
+Checks completed:
+
+- RAID healthy
+- CPU temperature normal
+- Drive temperatures normal
+- No undervoltage
+- No thermal throttling
+- Docker healthy
+- qBittorrent required manual restart
+
+Outcome:
+
+No root cause identified.
+
+Classification:
+
+RWT (Returned Working / Tested)
+
+Continue monitoring.
 
 ## Next Steps
 
-- Deploy Sonarr (completed)
-- Deploy Radarr (completed)
-- Deploy Jellyfin
-- Storage organisation
-- Monitoring
 - Backup strategy
 - Disaster recovery testing
+- Monitoring and alerting
+- Personal website / dashboard
+- Reservoir scraper
+- Physical enclosure design
+- Temperature monitoring
+
+## Known Issues
+
+- qBittorrent required manual restart following unexpected reboot on 2026-07-29.
+- Root cause not identified.
+- Monitor for recurrence before making configuration changes.
