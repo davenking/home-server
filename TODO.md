@@ -21,11 +21,21 @@
 - [x] Install qBittorrent
 - [x] Install Gluetun
 
-
-## Phase 4
-- [ ] Personal website
+## Phase 4 - Website and monitoring dashboard
+- [x] Configure Cloudflare Tunnel
+- [ ] Build personal website
+- [ ] Create KingyPiNAS dashboard page
+- [ ] Display Pi online/offline status
+- [ ] Display CPU temperature
+- [ ] Display individual SATA drive temperatures
+- [ ] Display RAID health
+- [ ] Display VPN and Cloudflare Tunnel status
+- [ ] Display Jellyfin, Sonarr, Radarr and Prowlarr status
+- [ ] Display last successful backup
+- [ ] Display active alerts
+- [ ] Add hourly data collection
+- [ ] Add email alerts for temperature, RAID, VPN, container and disk-space failures
 - [ ] Reservoir scraper
-- [ ] Cloudflare Tunnel
 
 ## Phase 5 - Physical build
 - [ ] Design Raspberry Pi NAS enclosure
@@ -36,23 +46,7 @@
 - [ ] Test temperatures under load
 - [ ] Final print and assembly
 
-## Phase 6 - Reliability
-- [ ] Backup strategy
-- [ ] Disaster recovery testing
-- [ ] Monitoring and alerting
-
-## Future improvements
-
-- [ ] Evaluate moving Prowlarr behind Gluetun VPN
-      - Reason: consistent VPN routing for indexer traffic
-      - Risk: Docker networking changes
-      - Test required: Sonarr/Radarr ↔ Prowlarr communication
-
-## Monitoring and alerting
-
-- [ ] Monitor Raspberry Pi CPU temperature
-- [ ] Monitor SATA drive temperatures
-- [ ] Monitor RAID health
-- [ ] Monitor Docker container status
-- [ ] Create server dashboard
-- [ ] Add temperature/failure alerts
+## Phase 6 - Backup and recovery
+- [ ] Define backup strategy
+- [ ] Automate configuration backups
+- [ ] Test disaster recovery procedure

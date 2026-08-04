@@ -73,7 +73,7 @@ Completed:
 
 ## v0.6.0
 
-Future improvements planned.
+Roadmap and future improvements defined.
 
 Planned:
 
@@ -86,4 +86,17 @@ Planned:
 - Alert notifications
 - Backup strategy
 - Disaster recovery testing
-- Evaluate moving Prowlarr behind Gluetun VPN
+
+
+## v0.7.0
+
+Prowlarr VPN routing and integration update.
+
+Completed:
+
+- Prowlarr routed through the Gluetun VPN gateway
+- Prowlarr web interface exposed through Gluetun on port 9696
+- Prowlarr application links for Sonarr and Radarr updated to use `http://gluetun:9696`
+- Sonarr and Radarr indexer connectivity re-tested successfully
+- Prowlarr VPN connectivity verified with a test indexer
+- Local recovery backups excluded from Git
