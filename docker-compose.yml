@@ -1,3 +1,15 @@
+x-linuxserver-environment: &linuxserver-environment
+  TZ: ${TZ}
+  PUID: ${PUID}
+  PGID: ${PGID}
+
+x-linuxserver-service: &linuxserver-service
+  restart: unless-stopped
+
+  environment:
+    <<: *linuxserver-environment
+
+
 services:
 
   #############################################################################
@@ -45,6 +57,8 @@ services:
   #############################################################################
 
   qbittorrent:
+    <<: *linuxserver-service
+
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
 
@@ -54,12 +68,8 @@ services:
       gluetun:
         condition: service_healthy
 
-    restart: unless-stopped
-
     environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
+      <<: *linuxserver-environment
       WEBUI_PORT: 8080
 
     volumes:
@@ -67,6 +77,7 @@ services:
       - ${MEDIA_ROOT}/torrents:/downloads
 
   prowlarr:
+    <<: *linuxserver-service
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
 
@@ -76,29 +87,16 @@ services:
       gluetun:
         condition: service_healthy
 
-    restart: unless-stopped
-
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-
     volumes:
       - ${CONFIG_ROOT}/prowlarr:/config
 
   sonarr:
+    <<: *linuxserver-service
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
 
-    restart: unless-stopped
-
     ports:
       - "8989:8989"
-
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
 
     volumes:
       - ${CONFIG_ROOT}/sonarr:/config
@@ -107,18 +105,12 @@ services:
 
 
   radarr:
+    <<: *linuxserver-service
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
 
-    restart: unless-stopped
-
     ports:
       - "7878:7878"
-
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
 
     volumes:
       - ${CONFIG_ROOT}/radarr:/config
@@ -131,18 +123,12 @@ services:
   #############################################################################
 
   jellyfin:
+    <<: *linuxserver-service
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
 
-    restart: unless-stopped
-
     ports:
       - "8096:8096"
-
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
 
     volumes:
       - ${CONFIG_ROOT}/jellyfin:/config
