@@ -1,142 +1,206 @@
 # KingyPiNAS Current State
 
-Date: 2026-07-26
+Date: 2026-08-05
 
-## Platform Status
+## Platform status
 
-The platform has reached a stable baseline.
+KingyPiNAS has reached a stable operational baseline.
 
-The Raspberry Pi server is operating reliably using Ethernet-only networking.
+- Raspberry Pi 5 running Raspberry Pi OS Lite (64-bit)
+- Ethernet-only networking; Wi-Fi disabled
+- Static DHCP reservation: `192.168.1.217`
+- RAID 5 healthy and mounted at `/srv`
+- Docker services persistent across reboot
+- Configuration stored in Git and pushed to GitHub
 
-## Working Services
+## Storage
 
-- Gluetun
-  - Proton VPN WireGuard
-  - Healthy
-  - Provides VPN gateway for qBittorrent
+```text
+/srv
+├── backups
+├── docker-data
+├── home-server
+└── media
+```
 
-- qBittorrent
-  - Runs through Gluetun network namespace
-  - Web UI secured
-  - Configuration stored in /srv/docker-data/qbittorrent
+The RAID uses `mdadm` with an ext4 filesystem.
 
-- Prowlarr
-  - Running as Docker container
-  - Web UI available on port 9696
-  - Configuration stored in /srv/docker-data/prowlarr
-  - Provides centralised indexer management for future media services
+## Running services
 
-- Sonarr
-  - Running as Docker container
-  - Web UI available on port 8989
-  - Configuration stored in /srv/docker-data/sonarr
-  - Connected to Prowlarr for indexer management
-  - Connected to qBittorrent for downloads
-  - manages TV series and monitors the download directory.
+### Gluetun
 
-- Radarr
-  - Running as Docker container
-  - Web UI available on port 7878
-  - Configuration stored in /srv/docker-data/radarr
-  - Connected to Prowlarr for indexer management
-  - Connected to qBittorrent for downloads
-  - manages Movies and monitors the download directory.
+- Proton VPN using WireGuard
+- Health checks enabled
+- Shared network namespace for qBittorrent and Prowlarr
+- Publishes:
+  - qBittorrent Web UI: port `8080`
+  - Prowlarr Web UI: port `9696`
 
-## Validation Completed
+### qBittorrent
 
-- Confirmed Pi public IP differs from VPN IP
-- Confirmed Gluetun health
-- Confirmed qBittorrent cannot operate without VPN
-- Confirmed configuration survives container recreation
+- Runs through Gluetun:
 
-## Next Steps
+  ```yaml
+  network_mode: "service:gluetun"
+  ```
 
-- Media services
-- Storage organisation
-- Monitoring
-- Physical case design
+- Persistent configuration:
 
-## Gluetun and qBittorrent Recovery
+  ```text
+  /srv/docker-data/qbittorrent
+  ```
 
-qBittorrent uses the Gluetun container network namespace:
+- Download location:
 
-    network_mode: "service:gluetun"
+  ```text
+  /srv/media/torrents
+  ```
 
-This means qBittorrent depends on Gluetun for all network connectivity.
+### Prowlarr
 
-If Gluetun is stopped and restarted, qBittorrent may require a restart to restore Web UI access.
+- Runs through Gluetun:
+
+  ```yaml
+  network_mode: "service:gluetun"
+  ```
+
+- Persistent configuration:
+
+  ```text
+  /srv/docker-data/prowlarr
+  ```
+
+- Provides indexer management for Sonarr and Radarr.
+- Sonarr and Radarr reach Prowlarr at:
+
+  ```text
+  http://gluetun:9696
+  ```
+
+### Sonarr
+
+- TV-series management
+- Web UI: port `8989`
+- Persistent configuration:
+
+  ```text
+  /srv/docker-data/sonarr
+  ```
+
+- Media library:
+
+  ```text
+  /srv/media/tv
+  ```
+
+### Radarr
+
+- Movie management
+- Web UI: port `7878`
+- Persistent configuration:
+
+  ```text
+  /srv/docker-data/radarr
+  ```
+
+- Media library:
+
+  ```text
+  /srv/media/movies
+  ```
+
+### Jellyfin
+
+- Family media server
+- Web UI: port `8096`
+- Persistent configuration:
+
+  ```text
+  /srv/docker-data/jellyfin
+  ```
+
+- Libraries include movies, TV, home movies, and family archive material.
+
+### Cloudflared
+
+- Existing `home-server` Cloudflare Tunnel
+- Provides secure remote access without router port forwarding
+- Used for Jellyfin and the KingyPiNAS dashboard
+
+### Dashboard
+
+- Static dashboard foundation served by Nginx
+- Docker service name: `dashboard`
+- Not exposed through a host port
+- Available remotely at:
+
+  ```text
+  https://dashboard.kingypiweb.uk
+  ```
+
+- Protected by Cloudflare Access
+- Access restricted to approved email addresses
+- Supports Cloudflare-account login and email one-time PIN login
 
 ## Networking
 
-Current configuration:
-
-- Ethernet only
-- Wi-Fi disabled
-- IP address: 192.168.1.217
-- DHCP provided by BT Smart Hub 2
-
-Previous intermittent SSH connectivity issues occurred when both Wi-Fi and Ethernet were active.
-
-Moving to Ethernet-only networking has resolved the issue during extended testing.
-
-## Docker Status
-
-Validation completed:
-
-- Containers restart successfully after reboot
-- Gluetun reports healthy
-- qBittorrent reconnects correctly
-- Prowlarr starts automatically
-- Radarr starts automatically 
-- Configuration persists after restart
-
-## Validation Completed
-
-- Confirmed Pi public IP differs from VPN IP
-- Confirmed Gluetun health
-- Confirmed qBittorrent cannot operate without VPN
-- Confirmed configuration survives container recreation
-- Confirmed Docker services survive reboot
-
-## Gluetun and qBittorrent Recovery
-
-qBittorrent uses the Gluetun container network namespace:
-
-    network_mode: "service:gluetun"
-
-This means qBittorrent depends on Gluetun for all network connectivity.
-
-If Gluetun is stopped and restarted, qBittorrent may require a restart to restore Web UI access.
-
-Recovery sequence:
-
+```text
+Internet
+    │
+Cloudflare Access
+    │
+Cloudflare Tunnel
+    │
+Dashboard container
 ```
-docker restart gluetun
 
-Wait until Gluetun reports healthy:
+The dashboard route is:
 
-docker ps
+```text
+dashboard.kingypiweb.uk → http://dashboard:80
+```
 
-Then restart qBittorrent:
+The public hostname, tunnel route, and Cloudflare Access policy are managed in Cloudflare rather than Git.
 
-docker restart qbittorrent
+## Validation completed
 
-The qBittorrent configuration is persistent in:/srv/docker-data/qbittorrent
+- RAID created, mounted, and operating normally
+- Gluetun reports healthy
+- qBittorrent traffic confirmed through the VPN
+- qBittorrent cannot operate normally without Gluetun
+- Prowlarr traffic confirmed through Gluetun
+- Sonarr and Radarr connectivity to Prowlarr re-tested after VPN routing change
+- Docker services survive reboot
+- Persistent configuration survives container recreation
+- Dashboard reachable remotely through Cloudflare Access
+- Dashboard access verified using email one-time PIN authentication
 
-so restarting the container does not affect settings or credentials.
+## Gluetun-dependent service recovery
 
-Git Status
-Repository clean
-Changes pushed to GitHub
-Documentation maintained under version control
+qBittorrent and Prowlarr share Gluetun’s network namespace. If Gluetun is recreated, they should be recreated with it.
 
-Next Steps
-Deploy Sonarr (completed)
-Deploy Radarr (completed)
-Deploy Jellyfin
-Storage organisation
-Monitoring
-Backup strategy
-Disaster recovery testing
+```bash
+docker compose up -d gluetun qbittorrent prowlarr
+```
 
+This does not affect their settings, which are stored in persistent Docker volumes.
 
+## Recovery and backups
+
+- Local recovery archives are stored in:
+
+  ```text
+  /srv/home-server/backups
+  ```
+
+- Backup archives are intentionally excluded from Git because they can contain credentials and application configuration.
+- Full automated backup and disaster-recovery testing remain planned work.
+
+## Next steps
+
+- Develop the dashboard homepage
+- Collect CPU, drive, RAID, VPN, tunnel, container, and backup status
+- Add monitoring history and alerts
+- Define and test the backup strategy
+- Develop the personal website
+- Design and build the NAS enclosure

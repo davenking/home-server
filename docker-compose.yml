@@ -137,6 +137,18 @@ services:
       - ${MEDIA_ROOT}/home-movies:/home-movies
       - ${MEDIA_ROOT}/family-av:/family-av
 
+  #############################################################################
+  # Website and dashboard
+  #############################################################################
+
+  dashboard:
+    image: nginx:alpine
+    container_name: dashboard
+
+    restart: unless-stopped
+
+    volumes:
+      - ./dashboard:/usr/share/nginx/html:ro
 
 #############################################################################
 # Network
