@@ -3,12 +3,247 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>KingyPiNAS</title>
+    <title>KingyPiNAS Dashboard</title>
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #111827;
+        --surface: #1f2937;
+        --surface-light: #273549;
+        --text: #f9fafb;
+        --muted: #9ca3af;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --red: #fb7185;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--background);
+        color: var(--text);
+        font-family: Arial, sans-serif;
+      }
+
+      .page {
+        width: min(1100px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 24px;
+        margin-bottom: 32px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--green);
+        font-size: 0.8rem;
+        font-weight: bold;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 3.5rem);
+      }
+
+      .subtitle {
+        color: var(--muted);
+      }
+
+      .overall-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 999px;
+        background: #123b32;
+        color: var(--green);
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .section-title {
+        margin: 32px 0 14px;
+        font-size: 1rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        padding: 20px;
+        border: 1px solid #334155;
+        border-radius: 14px;
+        background: var(--surface);
+      }
+
+      .card-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .card-value {
+        margin: 10px 0 0;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      .card-detail {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .health-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .health-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: var(--surface-light);
+      }
+
+      .good {
+        color: var(--green);
+        font-weight: bold;
+      }
+
+      .footer-note {
+        margin-top: 32px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .page-header {
+          flex-direction: column;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <main>
-      <h1>KingyPiNAS</h1>
-      <p>Dashboard foundation is online.</p>
+    <main class="page">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Home server dashboard</p>
+          <h1>KingyPiNAS</h1>
+          <p class="subtitle">Example status — live monitoring will be added gradually.</p>
+        </div>
+
+        <div class="overall-status">
+          <span class="status-dot"></span>
+          Pi Online
+        </div>
+      </header>
+
+      <h2 class="section-title">Temperatures</h2>
+
+      <section class="grid">
+        <article class="card">
+          <p class="card-label">CPU</p>
+          <p class="card-value">47°C</p>
+          <p class="card-detail">Example value</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Drive 1</p>
+          <p class="card-value">43°C</p>
+          <p class="card-detail">Example value</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Drive 2</p>
+          <p class="card-value">44°C</p>
+          <p class="card-detail">Example value</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Drive 3 / 4</p>
+          <p class="card-value">42–43°C</p>
+          <p class="card-detail">Example values</p>
+        </article>
+      </section>
+
+      <h2 class="section-title">System health</h2>
+
+      <ul class="health-list">
+        <li class="health-item">
+          <span>RAID status</span>
+          <span class="good">Healthy</span>
+        </li>
+        <li class="health-item">
+          <span>VPN connection</span>
+          <span class="good">Connected</span>
+        </li>
+        <li class="health-item">
+          <span>Cloudflare Tunnel</span>
+          <span class="good">Connected</span>
+        </li>
+      </ul>
+
+      <h2 class="section-title">Services</h2>
+
+      <section class="grid">
+        <article class="card">
+          <p class="card-label">Jellyfin</p>
+          <p class="card-value good">Online</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Sonarr</p>
+          <p class="card-value good">Online</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Radarr</p>
+          <p class="card-value good">Online</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Prowlarr</p>
+          <p class="card-value good">Online</p>
+        </article>
+      </section>
+
+      <p class="footer-note">
+        Version 1: static layout only. No live system data is collected yet.
+      </p>
     </main>
   </body>
 </html>
