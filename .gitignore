@@ -11,3 +11,6 @@
 # Local recovery backups — may contain credentials
 backups/*.tar.gz
 backups/docker-compose.yml.*
+
+# Generated dashboard status
+dashboard/status.json

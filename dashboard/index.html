@@ -177,8 +177,8 @@
       <section class="grid">
         <article class="card">
           <p class="card-label">CPU</p>
-          <p class="card-value">47°C</p>
-          <p class="card-detail">Example value</p>
+          <p class="card-value" id="cpu-temperature">Loading…</p>
+          <p class="card-detail" id="cpu-temperature-detail">Reading current value…</p>
         </article>
 
         <article class="card">
@@ -241,9 +241,47 @@
         </article>
       </section>
 
-      <p class="footer-note">
-        Version 1: static layout only. No live system data is collected yet.
+
+      <p class="footer-note" id="dashboard-note">
+        Loading dashboard status…
       </p>
     </main>
+
+    <script>
+      async function loadDashboardStatus() {
+        const temperature = document.getElementById("cpu-temperature");
+        const detail = document.getElementById("cpu-temperature-detail");
+        const note = document.getElementById("dashboard-note");
+
+        try {
+          const response = await fetch(`/status.json?updated=${Date.now()}`, {
+            cache: "no-store"
+          });
+
+          if (!response.ok) {
+            throw new Error("Status data was unavailable");
+          }
+
+          const status = await response.json();
+          const cpuTemperature = Number(status.cpu_temperature_c);
+
+          if (!Number.isFinite(cpuTemperature)) {
+            throw new Error("CPU temperature was invalid");
+          }
+
+          temperature.textContent = `${cpuTemperature.toFixed(1)}°C`;
+
+          const collectedAt = new Date(status.generated_at);
+          detail.textContent = `Collected ${collectedAt.toLocaleString("en-GB")}`;
+          note.textContent = "CPU temperature is real data. Other values are examples.";
+        } catch {
+          temperature.textContent = "Unavailable";
+          detail.textContent = "Unable to read status data";
+          note.textContent = "Dashboard data could not be loaded.";
+        }
+      }
+
+      loadDashboardStatus();
+    </script>
   </body>
 </html>
