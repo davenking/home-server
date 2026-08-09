@@ -95,6 +95,20 @@
         gap: 16px;
       }
 
+
+.temperature-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .temperature-grid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+}
+
+
       .card {
         padding: 20px;
         border: 1px solid #334155;
@@ -174,31 +188,47 @@
 
       <h2 class="section-title">Temperatures</h2>
 
-      <section class="grid">
-        <article class="card">
-          <p class="card-label">CPU</p>
-          <p class="card-value" id="cpu-temperature">Loading…</p>
-          <p class="card-detail" id="cpu-temperature-detail">Reading current value…</p>
-        </article>
+<section class="temperature-grid">
+  <article class="card">
+    <p class="card-label">CPU</p>
+    <p class="card-value" id="cpu-temperature">Loading…</p>
+    <p class="card-detail" id="cpu-temperature-detail">Reading current value…</p>
+  </article>
 
-        <article class="card">
-          <p class="card-label">Drive 1</p>
-          <p class="card-value">43°C</p>
-          <p class="card-detail">Example value</p>
-        </article>
+  <article class="card">
+    <p class="card-label">Drive 1</p>
+    <p class="card-value">43°C</p>
+    <p class="card-detail">Example value</p>
+  </article>
 
-        <article class="card">
-          <p class="card-label">Drive 2</p>
-          <p class="card-value">44°C</p>
-          <p class="card-detail">Example value</p>
-        </article>
+  <article class="card">
+    <p class="card-label">Drive 2</p>
+    <p class="card-value">44°C</p>
+    <p class="card-detail">Example value</p>
+  </article>
 
-        <article class="card">
-          <p class="card-label">Drive 3 / 4</p>
-          <p class="card-value">42–43°C</p>
-          <p class="card-detail">Example values</p>
-        </article>
-      </section>
+  <article class="card">
+    <p class="card-label">Drive 3</p>
+    <p class="card-value">42°C</p>
+    <p class="card-detail">Example value</p>
+  </article>
+
+  <article class="card">
+    <p class="card-label">Drive 4</p>
+    <p class="card-value">43°C</p>
+    <p class="card-detail">Example value</p>
+  </article>
+</section>
+
+<h2 class="section-title">Storage</h2>
+
+<section class="grid">
+  <article class="card">
+    <p class="card-label">Disk Usage</p>
+    <p class="card-value" id="disk-usage">Loading…</p>
+    <p class="card-detail" id="disk-usage-detail">Reading current value…</p>
+  </article>
+</section>
 
       <h2 class="section-title">System health</h2>
 
@@ -252,6 +282,13 @@
         const temperature = document.getElementById("cpu-temperature");
         const detail = document.getElementById("cpu-temperature-detail");
         const note = document.getElementById("dashboard-note");
+        const diskUsage = document.getElementById("disk-usage");
+        const diskDetail = document.getElementById("disk-usage-detail");
+        function formatStorage(value) {
+          return value.replace("G", " GB").replace("T", " TB");
+        }
+
+
 
         try {
           const response = await fetch(`/status.json?updated=${Date.now()}`, {
@@ -273,6 +310,11 @@
 
           const collectedAt = new Date(status.generated_at);
           detail.textContent = `Collected ${collectedAt.toLocaleString("en-GB")}`;
+          diskUsage.textContent = `${status.disk_usage_percent}%`;
+          diskDetail.textContent =
+            `${formatStorage(status.disk_used)} / ${formatStorage(status.disk_size)}`;
+
+
           note.textContent = "CPU temperature is real data. Other values are examples.";
         } catch {
           temperature.textContent = "Unavailable";
