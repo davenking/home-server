@@ -16,7 +16,10 @@ sd_size=$(df -h / | awk 'NR==2 {print $2}')
 sd_used=$(df -h / | awk 'NR==2 {print $3}')
 sd_percent=$(df -h / | awk 'NR==2 {gsub(/%/, "", $5); print $5}')
 
-
+ram_total=$(free -m | awk '/^Mem:/ {print $2}')
+ram_available=$(free -m | awk '/^Mem:/ {print $7}')
+ram_available_percent=$(awk -v available="$ram_available" -v total="$ram_total" \
+  'BEGIN { printf "%.0f", (available / total) * 100 }')
 
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
@@ -29,7 +32,10 @@ printf '{
   "disk_size": "%s",
   "sd_usage_percent": %s,
   "sd_used": "%s",
-  "sd_size": "%s"
+  "sd_size": "%s",
+  "ram_available_percent": %s,
+  "ram_available_mib": %s,
+  "ram_total_mib": %s
 }
 ' \
   "$generated_at" \
@@ -40,6 +46,9 @@ printf '{
   "$sd_percent" \
   "$sd_used" \
   "$sd_size" \
+  "$ram_available_percent" \
+  "$ram_available" \
+  "$ram_total" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"
