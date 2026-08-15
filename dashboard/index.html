@@ -228,6 +228,13 @@
     <p class="card-value" id="disk-usage">Loading…</p>
     <p class="card-detail" id="disk-usage-detail">Reading current value…</p>
   </article>
+  <article class="card">
+    <p class="card-label">SD Card</p>
+    <p class="card-value" id="sd-usage">Loading…</p>
+    <p class="card-detail" id="sd-usage-detail">Reading current value…</p>
+  </article>
+
+
 </section>
 
       <h2 class="section-title">System health</h2>
@@ -284,6 +291,9 @@
         const note = document.getElementById("dashboard-note");
         const diskUsage = document.getElementById("disk-usage");
         const diskDetail = document.getElementById("disk-usage-detail");
+        const sdUsage = document.getElementById("sd-usage");
+        const sdDetail = document.getElementById("sd-usage-detail");
+
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
         }
@@ -313,9 +323,11 @@
           diskUsage.textContent = `${status.disk_usage_percent}%`;
           diskDetail.textContent =
             `${formatStorage(status.disk_used)} / ${formatStorage(status.disk_size)}`;
+          sdUsage.textContent = `${status.sd_usage_percent}%`;
+          sdDetail.textContent =
+            `${formatStorage(status.sd_used)} / ${formatStorage(status.sd_size)}`;
 
-
-          note.textContent = "CPU temperature is real data. Other values are examples.";
+          note.textContent =  "CPU temperature and storage values are live. Additional monitoring is being added.";
         } catch {
           temperature.textContent = "Unavailable";
           detail.textContent = "Unable to read status data";
