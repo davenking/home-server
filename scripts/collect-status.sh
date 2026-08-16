@@ -21,6 +21,31 @@ ram_available=$(free -m | awk '/^Mem:/ {print $7}')
 ram_available_percent=$(awk -v available="$ram_available" -v total="$ram_total" \
   'BEGIN { printf "%.0f", (available / total) * 100 }')
 
+# Collect SMART temperatures for each RAID drive
+
+for drive in sda sdb sdc sdd
+do
+    temperature=$(sudo smartctl -A /dev/$drive \
+        | grep Temperature_Celsius \
+        | awk '{print $10}')
+
+    case "$drive" in
+        sda)
+            sda_temperature="$temperature"
+            ;;
+        sdb)
+            sdb_temperature="$temperature"
+            ;;
+        sdc)
+            sdc_temperature="$temperature"
+            ;;
+        sdd)
+            sdd_temperature="$temperature"
+            ;;
+    esac
+done
+
+
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
 
@@ -35,7 +60,12 @@ printf '{
   "sd_size": "%s",
   "ram_available_percent": %s,
   "ram_available_mib": %s,
-  "ram_total_mib": %s
+  "ram_total_mib": %s,
+  "sda_temperature_c": %s,
+  "sdb_temperature_c": %s,
+  "sdc_temperature_c": %s,
+  "sdd_temperature_c": %s
+
 }
 ' \
   "$generated_at" \
@@ -49,6 +79,10 @@ printf '{
   "$ram_available_percent" \
   "$ram_available" \
   "$ram_total" \
+  "$sda_temperature" \
+  "$sdb_temperature" \
+  "$sdc_temperature" \
+  "$sdd_temperature" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"

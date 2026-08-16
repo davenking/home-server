@@ -177,7 +177,9 @@
         <div>
           <p class="eyebrow">Home server dashboard</p>
           <h1>KingyPiNAS</h1>
-          <p class="subtitle">Example status — live monitoring will be added gradually.</p>
+          <p class="subtitle">
+            Live status of your Raspberry Pi home server.
+          </p>
         </div>
 
         <div class="overall-status">
@@ -197,26 +199,26 @@
 
   <article class="card">
     <p class="card-label">Drive 1</p>
-    <p class="card-value">43°C</p>
-    <p class="card-detail">Example value</p>
+    <p class="card-value" id="drive1-temperature">Loading…</p>
+    <p class="card-detail">Current SMART temperature</p>
   </article>
 
   <article class="card">
     <p class="card-label">Drive 2</p>
-    <p class="card-value">44°C</p>
-    <p class="card-detail">Example value</p>
+    <p class="card-value" id="drive2-temperature">Loading…</p>
+    <p class="card-detail">Current SMART temperature</p>
   </article>
 
   <article class="card">
     <p class="card-label">Drive 3</p>
-    <p class="card-value">42°C</p>
-    <p class="card-detail">Example value</p>
+    <p class="card-value" id="drive3-temperature">Loading…</p>
+    <p class="card-detail">Current SMART temperature</p>
   </article>
 
   <article class="card">
     <p class="card-label">Drive 4</p>
-    <p class="card-value">43°C</p>
-    <p class="card-detail">Example value</p>
+    <p class="card-value" id="drive4-temperature">Loading…</p>
+    <p class="card-detail">Current SMART temperature</p>
   </article>
 </section>
 
@@ -306,6 +308,10 @@
         const sdDetail = document.getElementById("sd-usage-detail");
         const ramAvailable = document.getElementById("ram-available");
         const ramDetail = document.getElementById("ram-available-detail");
+        const drive1Temperature = document.getElementById("drive1-temperature");
+        const drive2Temperature = document.getElementById("drive2-temperature");
+        const drive3Temperature = document.getElementById("drive3-temperature");
+        const drive4Temperature = document.getElementById("drive4-temperature");
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -343,9 +349,17 @@
             `${status.ram_available_percent}% `;
           ramDetail.textContent =
             `${status.ram_available_mib} MiB / ${status.ram_total_mib} MiB`;
+          drive1Temperature.textContent =
+            `${status.sda_temperature_c}°C`;
+          drive2Temperature.textContent =
+            `${status.sdb_temperature_c}°C`;
+          drive3Temperature.textContent =
+            `${status.sdc_temperature_c}°C`;
+          drive4Temperature.textContent =
+            `${status.sdd_temperature_c}°C`;
 
 
-          note.textContent =  "CPU temperature, storage and System resource values are live. Additional monitoring is being added.";
+          note.textContent =  "Dashboard updated automatically every minute.";
         } catch {
           temperature.textContent = "Unavailable";
           detail.textContent = "Unable to read status data";
