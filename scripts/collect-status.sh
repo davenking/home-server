@@ -21,6 +21,9 @@ ram_available=$(free -m | awk '/^Mem:/ {print $7}')
 ram_available_percent=$(awk -v available="$ram_available" -v total="$ram_total" \
   'BEGIN { printf "%.0f", (available / total) * 100 }')
 
+# Collect system uptime
+system_uptime=$(uptime -p | cut -c 4-)
+
 # Collect SMART temperatures for each RAID drive
 
 for drive in sda sdb sdc sdd
@@ -61,6 +64,7 @@ printf '{
   "ram_available_percent": %s,
   "ram_available_mib": %s,
   "ram_total_mib": %s,
+  "system_uptime": "%s",
   "sda_temperature_c": %s,
   "sdb_temperature_c": %s,
   "sdc_temperature_c": %s,
@@ -79,6 +83,7 @@ printf '{
   "$ram_available_percent" \
   "$ram_available" \
   "$ram_total" \
+  "$system_uptime" \
   "$sda_temperature" \
   "$sdb_temperature" \
   "$sdc_temperature" \

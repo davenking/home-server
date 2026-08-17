@@ -178,8 +178,13 @@
           <p class="eyebrow">Home server dashboard</p>
           <h1>KingyPiNAS</h1>
           <p class="subtitle">
-            Live status of your Raspberry Pi home server.
+            Live status of my Raspberry Pi home server.
           </p>
+
+          <p class="subtitle" id="system-uptime">Uptime: Loading…</p>
+          <p class="subtitle" id="last-updated">Last updated: Loading…</p>
+
+
         </div>
 
         <div class="overall-status">
@@ -311,6 +316,8 @@
         const drive2Temperature = document.getElementById("drive2-temperature");
         const drive3Temperature = document.getElementById("drive3-temperature");
         const drive4Temperature = document.getElementById("drive4-temperature");
+        const systemUptime = document.getElementById("system-uptime");
+        const lastUpdated = document.getElementById("last-updated");
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -337,7 +344,10 @@
           temperature.textContent = `${cpuTemperature.toFixed(1)}°C`;
 
           const collectedAt = new Date(status.generated_at);
-          detail.textContent = `Collected ${collectedAt.toLocaleString("en-GB")}`;
+          systemUptime.textContent = `Uptime: ${status.system_uptime}`;
+          lastUpdated.textContent =
+            `Last updated: ${collectedAt.toLocaleTimeString("en-GB")}`;
+          detail.textContent = "Current CPU temperature";
           diskUsage.textContent = `${status.disk_usage_percent}%`;
           diskDetail.textContent =
             `${formatStorage(status.disk_used)} / ${formatStorage(status.disk_size)}`;
