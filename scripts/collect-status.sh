@@ -22,6 +22,16 @@ ram_used=$((ram_total - ram_available))
 ram_used_percent=$(awk -v used="$ram_used" -v total="$ram_total" \
   'BEGIN { printf "%.0f", (used / total) * 100 }')
 
+# Collect RAID status
+raid_state=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
+  | grep "State :" \
+  | awk -F ': ' '{gsub(/^ +| +$/, "", $2); print $2}')
+
+raid_failed_devices=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
+  | grep "Failed Devices" \
+  | awk -F ': ' '{print $2}')
+
+
 # Collect system uptime
 system_uptime=$(uptime -p | cut -c 4-)
 
@@ -69,7 +79,9 @@ printf '{
   "sda_temperature_c": %s,
   "sdb_temperature_c": %s,
   "sdc_temperature_c": %s,
-  "sdd_temperature_c": %s
+  "sdd_temperature_c": %s,
+  "raid_state": "%s",
+  "raid_failed_devices": %s
 
 }
 ' \
@@ -89,6 +101,8 @@ printf '{
   "$sdb_temperature" \
   "$sdc_temperature" \
   "$sdd_temperature" \
+  "$raid_state" \
+  "$raid_failed_devices" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"

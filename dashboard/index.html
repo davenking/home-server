@@ -259,7 +259,7 @@
       <ul class="health-list">
         <li class="health-item">
           <span>RAID status</span>
-          <span class="good">Healthy</span>
+          <span class="good" id="raid-status">Loading...</span>
         </li>
         <li class="health-item">
           <span>VPN connection</span>
@@ -316,6 +316,7 @@
         const drive2Temperature = document.getElementById("drive2-temperature");
         const drive3Temperature = document.getElementById("drive3-temperature");
         const drive4Temperature = document.getElementById("drive4-temperature");
+        const raidStatus = document.getElementById("raid-status");
         const systemUptime = document.getElementById("system-uptime");
         const lastUpdated = document.getElementById("last-updated");
 
@@ -358,6 +359,23 @@
             `${status.ram_used_percent}% `;
           ramDetail.textContent =
             `${status.ram_used_mib} MiB / ${status.ram_total_mib} MiB`;
+
+
+          if (
+            status.raid_failed_devices === 0 &&
+            (
+              status.raid_state === "active" ||
+              status.raid_state === "clean"
+            )
+          ) {
+            raidStatus.textContent = "Healthy";
+          } else {
+            raidStatus.textContent = "Degraded";
+          }
+
+          drive1Temperature.textContent =
+            `${status.sda_temperature_c}°C`;
+
           drive1Temperature.textContent =
             `${status.sda_temperature_c}°C`;
           drive2Temperature.textContent =
