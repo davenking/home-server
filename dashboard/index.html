@@ -231,12 +231,12 @@
 
 <section class="grid">
   <article class="card">
-    <p class="card-label">Disk Usage</p>
+    <p class="card-label">Raid Usage</p>
     <p class="card-value" id="disk-usage">Loading…</p>
     <p class="card-detail" id="disk-usage-detail">Reading current value…</p>
   </article>
   <article class="card">
-    <p class="card-label">SD Card</p>
+    <p class="card-label">SD Card Usage</p>
     <p class="card-value" id="sd-usage">Loading…</p>
     <p class="card-detail" id="sd-usage-detail">Reading current value…</p>
   </article>
@@ -246,9 +246,9 @@
 
 <section class="grid">
   <article class="card">
-    <p class="card-label">RAM Available</p>
-    <p class="card-value" id="ram-available">Loading…</p>
-    <p class="card-detail" id="ram-available-detail">Reading current value…</p>
+    <p class="card-label">RAM Usage</p>
+    <p class="card-value" id="ram-usage">Loading…</p>
+    <p class="card-detail" id="ram-usage-detail">Reading current value…</p>
   </article>
 </section>
 
@@ -310,8 +310,8 @@
         const diskDetail = document.getElementById("disk-usage-detail");
         const sdUsage = document.getElementById("sd-usage");
         const sdDetail = document.getElementById("sd-usage-detail");
-        const ramAvailable = document.getElementById("ram-available");
-        const ramDetail = document.getElementById("ram-available-detail");
+        const ramUsage = document.getElementById("ram-usage");
+        const ramDetail = document.getElementById("ram-usage-detail");
         const drive1Temperature = document.getElementById("drive1-temperature");
         const drive2Temperature = document.getElementById("drive2-temperature");
         const drive3Temperature = document.getElementById("drive3-temperature");
@@ -354,10 +354,10 @@
           sdUsage.textContent = `${status.sd_usage_percent}%`;
           sdDetail.textContent =
             `${formatStorage(status.sd_used)} / ${formatStorage(status.sd_size)}`;
-          ramAvailable.textContent =
-            `${status.ram_available_percent}% `;
+          ramUsage.textContent =
+            `${status.ram_used_percent}% `;
           ramDetail.textContent =
-            `${status.ram_available_mib} MiB / ${status.ram_total_mib} MiB`;
+            `${status.ram_used_mib} MiB / ${status.ram_total_mib} MiB`;
           drive1Temperature.textContent =
             `${status.sda_temperature_c}°C`;
           drive2Temperature.textContent =

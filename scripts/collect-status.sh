@@ -18,8 +18,9 @@ sd_percent=$(df -h / | awk 'NR==2 {gsub(/%/, "", $5); print $5}')
 
 ram_total=$(free -m | awk '/^Mem:/ {print $2}')
 ram_available=$(free -m | awk '/^Mem:/ {print $7}')
-ram_available_percent=$(awk -v available="$ram_available" -v total="$ram_total" \
-  'BEGIN { printf "%.0f", (available / total) * 100 }')
+ram_used=$((ram_total - ram_available))
+ram_used_percent=$(awk -v used="$ram_used" -v total="$ram_total" \
+  'BEGIN { printf "%.0f", (used / total) * 100 }')
 
 # Collect system uptime
 system_uptime=$(uptime -p | cut -c 4-)
@@ -61,8 +62,8 @@ printf '{
   "sd_usage_percent": %s,
   "sd_used": "%s",
   "sd_size": "%s",
-  "ram_available_percent": %s,
-  "ram_available_mib": %s,
+  "ram_used_percent": %s,
+  "ram_used_mib": %s,
   "ram_total_mib": %s,
   "system_uptime": "%s",
   "sda_temperature_c": %s,
@@ -80,8 +81,8 @@ printf '{
   "$sd_percent" \
   "$sd_used" \
   "$sd_size" \
-  "$ram_available_percent" \
-  "$ram_available" \
+  "$ram_used_percent" \
+  "$ram_used" \
   "$ram_total" \
   "$system_uptime" \
   "$sda_temperature" \
