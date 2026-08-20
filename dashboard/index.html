@@ -276,9 +276,9 @@
       <section class="grid">
         <article class="card">
           <p class="card-label">Jellyfin</p>
-          <p class="card-value good">Online</p>
+          <p class="card-value good" id="jellyfin-status">Loading…</p>
+          <p class="card-detail" id="jellyfin_uptime">Reading current value…</p>
         </article>
-
         <article class="card">
           <p class="card-label">Sonarr</p>
           <p class="card-value good">Online</p>
@@ -293,6 +293,7 @@
           <p class="card-label">Prowlarr</p>
           <p class="card-value good">Online</p>
         </article>
+
       </section>
 
 
@@ -319,6 +320,8 @@
         const raidStatus = document.getElementById("raid-status");
         const systemUptime = document.getElementById("system-uptime");
         const lastUpdated = document.getElementById("last-updated");
+        const jellyfinStatus = document.getElementById("jellyfin-status");
+        const jellyfinUptime = document.getElementById("jellyfin_uptime");
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -359,6 +362,12 @@
             `${status.ram_used_percent}% `;
           ramDetail.textContent =
             `${status.ram_used_mib} MiB / ${status.ram_total_mib} MiB`;
+
+          jellyfinStatus.textContent =
+            status.jellyfin_state === "running" ? "Online" : "Offline";
+
+          jellyfinUptime.textContent =
+            `Up ${status.jellyfin_uptime}`;
 
 
           if (

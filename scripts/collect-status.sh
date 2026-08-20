@@ -60,6 +60,19 @@ do
 done
 
 
+#docker status
+jellyfin_started=$(docker inspect -f '{{.State.StartedAt}}' jellyfin)
+current_epoch=$(date +%s)
+jellyfin_started_epoch=$(date -d "$jellyfin_started" +%s)
+jellyfin_age_seconds=$((current_epoch - jellyfin_started_epoch))
+
+jellyfin_uptime=$(printf "%s weeks, %s days, %s hours" \
+  "$((jellyfin_age_seconds / 604800))" \
+  "$((jellyfin_age_seconds % 604800 / 86400))" \
+  "$((jellyfin_age_seconds % 86400 / 3600))")
+
+jellyfin_state=$(docker inspect -f '{{.State.Status}}' jellyfin)
+
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
 
@@ -81,7 +94,14 @@ printf '{
   "sdc_temperature_c": %s,
   "sdd_temperature_c": %s,
   "raid_state": "%s",
-  "raid_failed_devices": %s
+  "raid_failed_devices": %s,
+  "jellyfin_started": "%s",
+  "current_epoch": %s,
+  "jellyfin_started_epoch": %s,
+  "jellyfin_age_seconds": %s,
+  "jellyfin_uptime": "%s",
+  "jellyfin_state": "%s"
+
 
 }
 ' \
@@ -103,6 +123,12 @@ printf '{
   "$sdd_temperature" \
   "$raid_state" \
   "$raid_failed_devices" \
+  "$jellyfin_started" \
+  "$current_epoch"\
+  "$jellyfin_started_epoch" \
+  "$jellyfin_age_seconds" \
+  "$jellyfin_uptime" \
+  "$jellyfin_state" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"
