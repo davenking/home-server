@@ -78,6 +78,12 @@ Validation completed:
 - Confirmed Pi public IP differs from VPN IP
 Containers generally restart successfully after reboot.
 
+Validation
+Verified that qBittorrent shares Gluetun's network namespace by confirming:
+- docker inspect -f '{{.State.Health.Status}}' gluetun returns healthy
+- docker inspect -f '{{.HostConfig.NetworkMode}}' qbittorrent references Gluetun's container ID
+- docker inspect -f '{{.Id}}' gluetun matches the container ID used by qBittorrent
+
 Observed:
 - One unexpected reboot (2026-07-29)
 - qBittorrent required manual restart following that reboot
