@@ -61,17 +61,26 @@ done
 
 
 #docker status
-jellyfin_started=$(docker inspect -f '{{.State.StartedAt}}' jellyfin)
 current_epoch=$(date +%s)
+#Jellyfin
+jellyfin_started=$(docker inspect -f '{{.State.StartedAt}}' jellyfin)
 jellyfin_started_epoch=$(date -d "$jellyfin_started" +%s)
 jellyfin_age_seconds=$((current_epoch - jellyfin_started_epoch))
-
-jellyfin_uptime=$(printf "%s weeks, %s days, %s hours" \
+jellyfin_uptime=$(printf "%s wks, %s days, %s hrs" \
   "$((jellyfin_age_seconds / 604800))" \
   "$((jellyfin_age_seconds % 604800 / 86400))" \
   "$((jellyfin_age_seconds % 86400 / 3600))")
-
 jellyfin_state=$(docker inspect -f '{{.State.Status}}' jellyfin)
+
+#Sonarr
+sonarr_started=$(docker inspect -f '{{.State.StartedAt}}' sonarr)
+sonarr_started_epoch=$(date -d "$sonarr_started" +%s)
+sonarr_age_seconds=$((current_epoch - sonarr_started_epoch))
+sonarr_uptime=$(printf "%s wks, %s days, %s hrs" \
+  "$((sonarr_age_seconds / 604800))" \
+  "$((sonarr_age_seconds % 604800 / 86400))" \
+  "$((sonarr_age_seconds % 86400 / 3600))")
+sonarr_state=$(docker inspect -f '{{.State.Status}}' sonarr)
 
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
@@ -100,7 +109,12 @@ printf '{
   "jellyfin_started_epoch": %s,
   "jellyfin_age_seconds": %s,
   "jellyfin_uptime": "%s",
-  "jellyfin_state": "%s"
+  "jellyfin_state": "%s",
+  "sonarr_started": "%s",
+  "sonarr_started_epoch": %s,
+  "sonarr_age_seconds": %s,
+  "sonarr_uptime": "%s",
+  "sonarr_state": "%s"
 
 
 }
@@ -129,6 +143,11 @@ printf '{
   "$jellyfin_age_seconds" \
   "$jellyfin_uptime" \
   "$jellyfin_state" \
+  "$sonarr_started" \
+  "$sonarr_started_epoch" \
+  "$sonarr_age_seconds" \
+  "$sonarr_uptime" \
+  "$sonarr_state" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"

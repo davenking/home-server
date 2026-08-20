@@ -279,10 +279,12 @@
           <p class="card-value good" id="jellyfin-status">Loading…</p>
           <p class="card-detail" id="jellyfin_uptime">Reading current value…</p>
         </article>
+
         <article class="card">
           <p class="card-label">Sonarr</p>
-          <p class="card-value good">Online</p>
-        </article>
+          <p class="card-value good" id="sonarr-status">Loading…</p>
+          <p class="card-detail" id="sonarr_uptime">Reading current value…</p>
+        </article>  
 
         <article class="card">
           <p class="card-label">Radarr</p>
@@ -291,6 +293,16 @@
 
         <article class="card">
           <p class="card-label">Prowlarr</p>
+          <p class="card-value good">Online</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">qBittorrent</p>
+          <p class="card-value good">Online</p>
+        </article>
+
+        <article class="card">
+          <p class="card-label">Gluetun</p>
           <p class="card-value good">Online</p>
         </article>
 
@@ -322,6 +334,9 @@
         const lastUpdated = document.getElementById("last-updated");
         const jellyfinStatus = document.getElementById("jellyfin-status");
         const jellyfinUptime = document.getElementById("jellyfin_uptime");
+        const sonarrStatus = document.getElementById("sonarr-status");
+        const sonarrUptime = document.getElementById("sonarr_uptime");
+
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -365,10 +380,13 @@
 
           jellyfinStatus.textContent =
             status.jellyfin_state === "running" ? "Online" : "Offline";
-
           jellyfinUptime.textContent =
             `Up ${status.jellyfin_uptime}`;
 
+          sonarrStatus.textContent =
+            status.sonarr_state === "running" ? "Online" : "Offline";
+          sonarrUptime.textContent =
+            `Up ${status.sonarr_uptime}`;
 
           if (
             status.raid_failed_devices === 0 &&
