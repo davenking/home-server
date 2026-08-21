@@ -288,8 +288,9 @@
 
         <article class="card">
           <p class="card-label">Radarr</p>
-          <p class="card-value good">Online</p>
-        </article>
+          <p class="card-value good" id="radarr-status">Loading…</p>
+          <p class="card-detail" id="radarr_uptime">Reading current value…</p>
+        </article> 
 
         <article class="card">
           <p class="card-label">Prowlarr</p>
@@ -336,6 +337,8 @@
         const jellyfinUptime = document.getElementById("jellyfin_uptime");
         const sonarrStatus = document.getElementById("sonarr-status");
         const sonarrUptime = document.getElementById("sonarr_uptime");
+        const radarrStatus = document.getElementById("radarr-status");
+        const radarrUptime = document.getElementById("radarr_uptime");
 
 
         function formatStorage(value) {
@@ -387,6 +390,10 @@
             status.sonarr_state === "running" ? "Online" : "Offline";
           sonarrUptime.textContent =
             `Up ${status.sonarr_uptime}`;
+          radarrStatus.textContent =
+            status.radarr_state === "running" ? "Online" : "Offline";
+          radarrUptime.textContent =
+            `Up ${status.radarr_uptime}`;
 
           if (
             status.raid_failed_devices === 0 &&

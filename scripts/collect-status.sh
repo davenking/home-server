@@ -82,6 +82,17 @@ sonarr_uptime=$(printf "%s wks, %s days, %s hrs" \
   "$((sonarr_age_seconds % 86400 / 3600))")
 sonarr_state=$(docker inspect -f '{{.State.Status}}' sonarr)
 
+#Radarr
+radarr_started=$(docker inspect -f '{{.State.StartedAt}}' radarr)
+radarr_started_epoch=$(date -d "$radarr_started" +%s)
+radarr_age_seconds=$((current_epoch - radarr_started_epoch))
+radarr_uptime=$(printf "%s wks, %s days, %s hrs" \
+  "$((radarr_age_seconds / 604800))" \
+  "$((radarr_age_seconds % 604800 / 86400))" \
+  "$((radarr_age_seconds % 86400 / 3600))")
+radarr_state=$(docker inspect -f '{{.State.Status}}' radarr)
+
+
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
 
@@ -114,7 +125,12 @@ printf '{
   "sonarr_started_epoch": %s,
   "sonarr_age_seconds": %s,
   "sonarr_uptime": "%s",
-  "sonarr_state": "%s"
+  "sonarr_state": "%s",
+  "radarr_started": "%s",
+  "radarr_started_epoch": %s,
+  "radarr_age_seconds": %s,
+  "radarr_uptime": "%s",
+  "radarr_state": "%s"
 
 
 }
@@ -148,6 +164,11 @@ printf '{
   "$sonarr_age_seconds" \
   "$sonarr_uptime" \
   "$sonarr_state" \
+  "$radarr_started" \
+  "$radarr_started_epoch" \
+  "$radarr_age_seconds" \
+  "$radarr_uptime" \
+  "$radarr_state" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"
