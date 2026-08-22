@@ -22,6 +22,8 @@ ram_used=$((ram_total - ram_available))
 ram_used_percent=$(awk -v used="$ram_used" -v total="$ram_total" \
   'BEGIN { printf "%.0f", (used / total) * 100 }')
 
+
+##System health##
 # Collect RAID status
 raid_state=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
   | grep "State :" \
@@ -30,6 +32,9 @@ raid_state=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
 raid_failed_devices=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
   | grep "Failed Devices" \
   | awk -F ': ' '{print $2}')
+
+#VPN Health
+vpn_health=$(docker inspect -f '{{.State.Health.Status}}' gluetun)
 
 
 # Collect system uptime
@@ -144,7 +149,6 @@ printf '{
   "sdd_temperature_c": %s,
   "raid_state": "%s",
   "raid_failed_devices": %s,
-  "current_epoch": %s,
   "jellyfin_uptime": "%s",
   "jellyfin_state": "%s",
   "sonarr_uptime": "%s",
@@ -156,7 +160,8 @@ printf '{
   "qbittorrent_uptime": "%s",
   "qbittorrent_state": "%s",
   "gluetun_uptime": "%s",
-  "gluetun_state": "%s"
+  "gluetun_state": "%s",
+  "vpn_health": "%s"
 
 
 }
@@ -179,7 +184,6 @@ printf '{
   "$sdd_temperature" \
   "$raid_state" \
   "$raid_failed_devices" \
-  "$current_epoch"\
   "$jellyfin_uptime" \
   "$jellyfin_state" \
   "$sonarr_uptime" \
@@ -192,6 +196,7 @@ printf '{
   "$qbittorrent_state" \
   "$gluetun_uptime" \
   "$gluetun_state" \
+  "$vpn_health" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"

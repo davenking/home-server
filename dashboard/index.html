@@ -261,10 +261,11 @@
           <span>RAID status</span>
           <span class="good" id="raid-status">Loading...</span>
         </li>
-        <li class="health-item">
-          <span>VPN connection</span>
-          <span class="good">Connected</span>
-        </li>
+
+	<li class="health-item">
+	  <span>VPN connection</span>
+	  <span class="good" id="vpn-health">Loading...</span>
+	</li>
         <li class="health-item">
           <span>Cloudflare Tunnel</span>
           <span class="good">Connected</span>
@@ -277,37 +278,37 @@
         <article class="card">
           <p class="card-label">Jellyfin</p>
           <p class="card-value good" id="jellyfin-status">Loading…</p>
-          <p class="card-detail" id="jellyfin_uptime">Reading current value…</p>
+          <p class="card-detail" id="jellyfin-uptime">Reading current value…</p>
         </article>
 
         <article class="card">
           <p class="card-label">Sonarr</p>
           <p class="card-value good" id="sonarr-status">Loading…</p>
-          <p class="card-detail" id="sonarr_uptime">Reading current value…</p>
+          <p class="card-detail" id="sonarr-uptime">Reading current value…</p>
         </article>  
 
         <article class="card">
           <p class="card-label">Radarr</p>
           <p class="card-value good" id="radarr-status">Loading…</p>
-          <p class="card-detail" id="radarr_uptime">Reading current value…</p>
+          <p class="card-detail" id="radarr-uptime">Reading current value…</p>
         </article> 
 
         <article class="card">
           <p class="card-label">Prowlarr</p>
           <p class="card-value good" id="prowlarr-status">Loading…</p>
-          <p class="card-detail" id="prowlarr_uptime">Reading current value…</p>
+          <p class="card-detail" id="prowlarr-uptime">Reading current value…</p>
         </article>  
 
         <article class="card">
           <p class="card-label">qBittorrent</p>
           <p class="card-value good" id="qbittorrent-status">Loading…</p>
-          <p class="card-detail" id="qbittorrent_uptime">Reading current value…</p>
+          <p class="card-detail" id="qbittorrent-uptime">Reading current value…</p>
         </article>  
 
         <article class="card">
           <p class="card-label">Gluetun</p>
           <p class="card-value good" id="gluetun-status">Loading…</p>
-          <p class="card-detail" id="gluetun_uptime">Reading current value…</p>
+          <p class="card-detail" id="gluetun-uptime">Reading current value…</p>
         </article> 
 
       </section>
@@ -334,20 +335,21 @@
         const drive3Temperature = document.getElementById("drive3-temperature");
         const drive4Temperature = document.getElementById("drive4-temperature");
         const raidStatus = document.getElementById("raid-status");
+        const vpnHealth = document.getElementById("vpn-health");
         const systemUptime = document.getElementById("system-uptime");
         const lastUpdated = document.getElementById("last-updated");
         const jellyfinStatus = document.getElementById("jellyfin-status");
-        const jellyfinUptime = document.getElementById("jellyfin_uptime");
+        const jellyfinUptime = document.getElementById("jellyfin-uptime");
         const sonarrStatus = document.getElementById("sonarr-status");
-        const sonarrUptime = document.getElementById("sonarr_uptime");
+        const sonarrUptime = document.getElementById("sonarr-uptime");
         const radarrStatus = document.getElementById("radarr-status");
-        const radarrUptime = document.getElementById("radarr_uptime");
+        const radarrUptime = document.getElementById("radarr-uptime");
         const prowlarrStatus = document.getElementById("prowlarr-status");
-        const prowlarrUptime = document.getElementById("prowlarr_uptime");
+        const prowlarrUptime = document.getElementById("prowlarr-uptime");
         const qbittorrentStatus = document.getElementById("qbittorrent-status");
-        const qbittorrentUptime = document.getElementById("qbittorrent_uptime");
+        const qbittorrentUptime = document.getElementById("qbittorrent-uptime");
         const gluetunStatus = document.getElementById("gluetun-status");
-        const gluetunUptime = document.getElementById("gluetun_uptime");
+        const gluetunUptime = document.getElementById("gluetun-uptime");
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -431,8 +433,9 @@
             raidStatus.textContent = "Degraded";
           }
 
-          drive1Temperature.textContent =
-            `${status.sda_temperature_c}°C`;
+          vpnHealth.textContent =
+            status.vpn_health === "healthy" ? "Connected" : "Disconnected";
+
 
           drive1Temperature.textContent =
             `${status.sda_temperature_c}°C`;
