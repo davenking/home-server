@@ -294,18 +294,21 @@
 
         <article class="card">
           <p class="card-label">Prowlarr</p>
-          <p class="card-value good">Online</p>
-        </article>
+          <p class="card-value good" id="prowlarr-status">Loading…</p>
+          <p class="card-detail" id="prowlarr_uptime">Reading current value…</p>
+        </article>  
 
         <article class="card">
           <p class="card-label">qBittorrent</p>
-          <p class="card-value good">Online</p>
-        </article>
+          <p class="card-value good" id="qbittorrent-status">Loading…</p>
+          <p class="card-detail" id="qbittorrent_uptime">Reading current value…</p>
+        </article>  
 
         <article class="card">
           <p class="card-label">Gluetun</p>
-          <p class="card-value good">Online</p>
-        </article>
+          <p class="card-value good" id="gluetun-status">Loading…</p>
+          <p class="card-detail" id="gluetun_uptime">Reading current value…</p>
+        </article> 
 
       </section>
 
@@ -339,7 +342,12 @@
         const sonarrUptime = document.getElementById("sonarr_uptime");
         const radarrStatus = document.getElementById("radarr-status");
         const radarrUptime = document.getElementById("radarr_uptime");
-
+        const prowlarrStatus = document.getElementById("prowlarr-status");
+        const prowlarrUptime = document.getElementById("prowlarr_uptime");
+        const qbittorrentStatus = document.getElementById("qbittorrent-status");
+        const qbittorrentUptime = document.getElementById("qbittorrent_uptime");
+        const gluetunStatus = document.getElementById("gluetun-status");
+        const gluetunUptime = document.getElementById("gluetun_uptime");
 
         function formatStorage(value) {
           return value.replace("G", " GB").replace("T", " TB");
@@ -390,10 +398,26 @@
             status.sonarr_state === "running" ? "Online" : "Offline";
           sonarrUptime.textContent =
             `Up ${status.sonarr_uptime}`;
+
           radarrStatus.textContent =
             status.radarr_state === "running" ? "Online" : "Offline";
           radarrUptime.textContent =
             `Up ${status.radarr_uptime}`;
+
+          prowlarrStatus.textContent =
+            status.prowlarr_state === "running" ? "Online" : "Offline";
+          prowlarrUptime.textContent =
+            `Up ${status.prowlarr_uptime}`;
+
+          qbittorrentStatus.textContent =
+            status.qbittorrent_state === "running" ? "Online" : "Offline";
+          qbittorrentUptime.textContent =
+            `Up ${status.qbittorrent_uptime}`;
+
+          gluetunStatus.textContent =
+            status.gluetun_state === "running" ? "Online" : "Offline";
+          gluetunUptime.textContent =
+            `Up ${status.gluetun_uptime}`;
 
           if (
             status.raid_failed_devices === 0 &&

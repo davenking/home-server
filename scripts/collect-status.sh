@@ -92,6 +92,35 @@ radarr_uptime=$(printf "%s wks, %s days, %s hrs" \
   "$((radarr_age_seconds % 86400 / 3600))")
 radarr_state=$(docker inspect -f '{{.State.Status}}' radarr)
 
+#Prowlarr
+prowlarr_started=$(docker inspect -f '{{.State.StartedAt}}' prowlarr)
+prowlarr_started_epoch=$(date -d "$prowlarr_started" +%s)
+prowlarr_age_seconds=$((current_epoch - prowlarr_started_epoch))
+prowlarr_uptime=$(printf "%s wks, %s days, %s hrs" \
+  "$((prowlarr_age_seconds / 604800))" \
+  "$((prowlarr_age_seconds % 604800 / 86400))" \
+  "$((prowlarr_age_seconds % 86400 / 3600))")
+prowlarr_state=$(docker inspect -f '{{.State.Status}}' prowlarr)
+
+#qBittorrent
+qbittorrent_state=$(docker inspect -f '{{.State.Status}}' qbittorrent)
+qbittorrent_started=$(docker inspect -f '{{.State.StartedAt}}' qbittorrent)
+qbittorrent_started_epoch=$(date -d "$qbittorrent_started" +%s)
+qbittorrent_age_seconds=$((current_epoch - qbittorrent_started_epoch))
+qbittorrent_uptime=$(printf "%s wks, %s days, %s hrs" \
+  "$((qbittorrent_age_seconds / 604800))" \
+  "$((qbittorrent_age_seconds % 604800 / 86400))" \
+  "$((qbittorrent_age_seconds % 86400 / 3600))")
+
+#Glutun
+gluetun_started=$(docker inspect -f '{{.State.StartedAt}}' gluetun)
+gluetun_started_epoch=$(date -d "$gluetun_started" +%s)
+gluetun_age_seconds=$((current_epoch - gluetun_started_epoch))
+gluetun_uptime=$(printf "%s wks, %s days, %s hrs" \
+  "$((gluetun_age_seconds / 604800))" \
+  "$((gluetun_age_seconds % 604800 / 86400))" \
+  "$((gluetun_age_seconds % 86400 / 3600))")
+gluetun_state=$(docker inspect -f '{{.State.Status}}' gluetun)
 
 generated_at=$(date --iso-8601=seconds)
 temporary_file=$(mktemp "${output_file}.XXXXXX")
@@ -115,22 +144,19 @@ printf '{
   "sdd_temperature_c": %s,
   "raid_state": "%s",
   "raid_failed_devices": %s,
-  "jellyfin_started": "%s",
   "current_epoch": %s,
-  "jellyfin_started_epoch": %s,
-  "jellyfin_age_seconds": %s,
   "jellyfin_uptime": "%s",
   "jellyfin_state": "%s",
-  "sonarr_started": "%s",
-  "sonarr_started_epoch": %s,
-  "sonarr_age_seconds": %s,
   "sonarr_uptime": "%s",
   "sonarr_state": "%s",
-  "radarr_started": "%s",
-  "radarr_started_epoch": %s,
-  "radarr_age_seconds": %s,
   "radarr_uptime": "%s",
-  "radarr_state": "%s"
+  "radarr_state": "%s",
+  "prowlarr_uptime": "%s",
+  "prowlarr_state": "%s",
+  "qbittorrent_uptime": "%s",
+  "qbittorrent_state": "%s",
+  "gluetun_uptime": "%s",
+  "gluetun_state": "%s"
 
 
 }
@@ -153,22 +179,19 @@ printf '{
   "$sdd_temperature" \
   "$raid_state" \
   "$raid_failed_devices" \
-  "$jellyfin_started" \
   "$current_epoch"\
-  "$jellyfin_started_epoch" \
-  "$jellyfin_age_seconds" \
   "$jellyfin_uptime" \
   "$jellyfin_state" \
-  "$sonarr_started" \
-  "$sonarr_started_epoch" \
-  "$sonarr_age_seconds" \
   "$sonarr_uptime" \
   "$sonarr_state" \
-  "$radarr_started" \
-  "$radarr_started_epoch" \
-  "$radarr_age_seconds" \
   "$radarr_uptime" \
   "$radarr_state" \
+  "$prowlarr_uptime" \
+  "$prowlarr_state" \
+  "$qbittorrent_uptime" \
+  "$qbittorrent_state" \
+  "$gluetun_uptime" \
+  "$gluetun_state" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"
