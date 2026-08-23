@@ -24,7 +24,7 @@ ram_used_percent=$(awk -v used="$ram_used" -v total="$ram_total" \
 
 
 ##System health##
-# Collect RAID status
+# RAID status
 raid_state=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
   | grep "State :" \
   | awk -F ': ' '{gsub(/^ +| +$/, "", $2); print $2}')
@@ -36,6 +36,8 @@ raid_failed_devices=$(sudo /usr/sbin/mdadm --detail /dev/md0 \
 #VPN Health
 vpn_health=$(docker inspect -f '{{.State.Health.Status}}' gluetun)
 
+#Cloud Flare
+cloudflare_state=$(docker inspect -f '{{.State.Status}}' cloudflared)
 
 # Collect system uptime
 system_uptime=$(uptime -p | cut -c 4-)
@@ -161,7 +163,8 @@ printf '{
   "qbittorrent_state": "%s",
   "gluetun_uptime": "%s",
   "gluetun_state": "%s",
-  "vpn_health": "%s"
+  "vpn_health": "%s",
+  "cloudflare_state": "%s"
 
 
 }
@@ -197,6 +200,7 @@ printf '{
   "$gluetun_uptime" \
   "$gluetun_state" \
   "$vpn_health" \
+  "$cloudflare_state" \
   > "$temporary_file"
 
 chmod 644 "$temporary_file"

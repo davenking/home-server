@@ -268,7 +268,7 @@
 	</li>
         <li class="health-item">
           <span>Cloudflare Tunnel</span>
-          <span class="good">Connected</span>
+          <span class="good" id="cloudflare-status">Loading...</span>
         </li>
       </ul>
 
@@ -336,6 +336,7 @@
         const drive4Temperature = document.getElementById("drive4-temperature");
         const raidStatus = document.getElementById("raid-status");
         const vpnHealth = document.getElementById("vpn-health");
+        const cloudflareStatus = document.getElementById("cloudflare-status");
         const systemUptime = document.getElementById("system-uptime");
         const lastUpdated = document.getElementById("last-updated");
         const jellyfinStatus = document.getElementById("jellyfin-status");
@@ -435,6 +436,9 @@
 
           vpnHealth.textContent =
             status.vpn_health === "healthy" ? "Connected" : "Disconnected";
+
+          cloudflareStatus.textContent =
+            status.cloudflare_state === "running" ? "Running" : "Not Running";
 
 
           drive1Temperature.textContent =
