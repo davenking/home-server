@@ -1,6 +1,6 @@
 # KingyPiNAS Current State
 
-Date: 2026-08-16
+Date: 2026-08-23
 
 ## System status
 
@@ -148,26 +148,63 @@ The RAID uses `mdadm` with an ext4 filesystem.
 The dashboard is updated automatically every minute by the
 `kingypinas-status.timer` systemd timer.
 
-The collector script runs as user `dave` and gathers:
+Dashboard data is collected by: dashboard/status.json
 
+The dashboard currently displays live data for:
+- Raspberry Pi online status
+- System uptime
+- Last status update time
 - CPU temperature
+- SMART temperature for each of the four RAID drives
 - RAID storage usage
 - SD card usage
-- RAM availability
-- SMART temperature for each RAID drive
+- RAM usage
+- RAID health
+- VPN connection health
+- Cloudflare Tunnel container state
+- Jellyfin container state and uptime
+- Sonarr container state and uptime
+- Radarr container state and uptime
+- Prowlarr container state and uptime
+- qBittorrent container state and uptime
+- Gluetun container state and uptime
+The dashboard refreshes status.json automatically every minute without
+requiring the webpage to be manually reloaded.
 
-### SMART monitoring
+### Privileged monitoring commands
 
-The collector uses `smartctl` to read drive SMART data.
+The dashboard collector runs as user `dave`.
 
-To avoid running the entire collector as `root`, a restricted
-`sudoers` rule allows passwordless execution of only the following
-commands:
+Some hardware status commands require elevated privileges. Rather than running
+the entire collector as `root`, KingyPiNAS uses restricted passwordless
+`sudoers` rules for only the commands required by the dashboard.
 
-- `/usr/sbin/smartctl -A /dev/sda`
-- `/usr/sbin/smartctl -A /dev/sdb`
-- `/usr/sbin/smartctl -A /dev/sdc`
-- `/usr/sbin/smartctl -A /dev/sdd`
+SMART temperature access: dave ALL=(root) NOPASSWD: /usr/sbin/smartctl -A /dev/sda, /usr/sbin/smartctl -A /dev/sdb, /usr/sbin/smartctl -A /dev/sdc, /usr/sbin/smartctl -A /dev/sdd
+RAID status access: dave ALL=(root) NOPASSWD: /usr/sbin/mdadm --detail /dev/md0
+The rules are stored in:/etc/sudoers.d/kingypinas-smartctl
+/etc/sudoers.d/kingypinas-mdadm
+This follows the principle of least privilege: the collector can execute only
+the specific privileged commands required for SMART temperature and RAID
+health monitoring.
+
+
+
+
+### Health status interpretation
+
+Dashboard status labels distinguish between container state and service health.
+
+- RAID is reported as `Healthy` when no failed devices are present and the
+  array state is `clean` or `active`.
+- VPN connection is reported as `Connected` when Gluetun's Docker health
+  status is `healthy`.
+- Cloudflare Tunnel currently reports `Running` based on the `cloudflared`
+  container state. This confirms that the container is running but does not
+  independently verify end-to-end tunnel connectivity.
+- Docker service cards report `Online` when the corresponding container state
+  is `running`.
+- Service uptime is calculated from each container's Docker `StartedAt`
+  timestamp.
 
 ## Networking
 
