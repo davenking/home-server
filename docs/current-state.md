@@ -1,6 +1,6 @@
 # KingyPiNAS Current State
 
-Date: 2026-08-23
+Date: 2026-08-24
 
 ## System status
 
@@ -250,6 +250,37 @@ docker compose up -d gluetun qbittorrent prowlarr
 ```
 
 This does not affect their settings, which are stored in persistent Docker volumes.
+
+### qBittorrent VPN recovery observation
+
+Observed on 2026-08-24:
+
+- Gluetun reported `healthy`
+- qBittorrent container reported `running`
+- qBittorrent could reach the Internet through the VPN
+- qBittorrent still showed `DHT: 0 nodes`
+- UDP trackers reported `Operation not permitted`
+- Torrents were not downloading
+- Restarting qBittorrent alone did not resolve the issue
+- Restarting Gluetun, waiting for it to become healthy, then restarting
+  qBittorrent and Prowlarr restored normal operation
+- After recovery, DHT increased to 193 nodes and downloads resumed
+
+The exact root cause has not been confirmed. The incident demonstrates that
+a `running` qBittorrent container and `healthy` Gluetun container do not by
+themselves prove that BitTorrent networking is functioning correctly.
+
+Current recovery procedure:
+
+```bash
+docker restart gluetun
+
+docker inspect -f '{{.State.Health.Status}}' gluetun
+
+docker restart qbittorrent prowlarr
+Wait for Gluetun to report healthy before restarting the dependent
+containers.
+
 
 ## Recovery and backups
 
