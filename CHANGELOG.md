@@ -100,3 +100,20 @@ Completed:
 - Sonarr and Radarr indexer connectivity re-tested successfully
 - Prowlarr VPN connectivity verified with a test indexer
 - Local recovery backups excluded from Git
+
+## v0.8.0
+
+Secure remote administration configured and tested.
+
+Completed:
+
+- Tailscale installed and enabled on KingyPiNAS
+- KingyPiNAS joined to the private Tailscale network
+- Remote SSH tested successfully over mobile data
+- Existing OpenSSH server used over the Tailscale network
+- SSH key authentication configured for the travel laptop
+- Windows SSH config added for simplified connection using `ssh kingypinas`
+- Windows OpenSSH Authentication Agent enabled
+- SSH private key protected with a passphrase
+- No router port forwarding required
+- Public SSH exposure avoided

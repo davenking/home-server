@@ -226,6 +226,35 @@ dashboard.kingypiweb.uk → http://dashboard:80
 
 The public hostname, tunnel route, and Cloudflare Access policy are managed in Cloudflare rather than Git.
 
+### Remote administration
+
+KingyPiNAS can be administered remotely through Tailscale without exposing SSH
+through the router.
+
+```text
+Remote laptop
+    │
+Tailscale private network
+    │
+OpenSSH
+    │
+KingyPiNAS
+
+Current configuration:
+- Tailscale installed and enabled on KingyPiNAS
+- KingyPiNAS Tailscale IPv4 address: 100.97.114.107
+- Existing OpenSSH server used for remote administration
+- SSH public-key authentication configured for the travel laptop
+- Windows SSH config allows connection using:
+
+- ssh kingypinas
+- Windows OpenSSH Authentication Agent configured to hold the unlocked private
+- key during the Windows session
+- SSH private key remains protected by a passphrase
+- No router port forwarding is used
+- Public SSH exposure is avoided
+Remote SSH has been tested successfully using mobile data outside the home LAN.
+
 ## Validation completed
 
 - RAID created, mounted, and operating normally
@@ -240,6 +269,11 @@ The public hostname, tunnel route, and Cloudflare Access policy are managed in C
 - Dashboard access verified using email one-time PIN authentication
 - Dashboard updates automatically every minute
 - SMART drive temperatures verified
+- Tailscale remote access tested successfully
+- SSH connection tested successfully over mobile data
+- SSH public-key authentication verified
+- `ssh kingypinas` shortcut verified from the remote laptop
+
 
 ## Gluetun-dependent service recovery
 
@@ -272,7 +306,6 @@ themselves prove that BitTorrent networking is functioning correctly.
 
 Current recovery procedure:
 
-```bash
 docker restart gluetun
 
 docker inspect -f '{{.State.Health.Status}}' gluetun
@@ -295,7 +328,6 @@ containers.
 
 ## Monitoring architecture
 
-```text
 systemd timer
         │
         ▼
@@ -307,20 +339,15 @@ status.json
         ▼
 Dashboard (Nginx)
 
+
 ## Next steps
 
-- Expand dashboard monitoring
-  - RAID health
-  - System uptime
-  - Docker container status
-  - VPN connection status
-  - Cloudflare Tunnel status
-  - Backup status
-
+- Validate remote administration after server reboot
+- Improve qBittorrent operational-health monitoring
+- Add dashboard stale-data detection
+- Add warning and error status colours
+- Add backup status monitoring
 - Add monitoring history
-
 - Define and test backup strategy
-
 - Develop the personal website
-
 - Design and build the NAS enclosure
