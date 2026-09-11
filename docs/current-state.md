@@ -189,7 +189,7 @@ health monitoring.
 
 
 
-
+B
 ### Health status interpretation
 
 Dashboard status labels distinguish between container state and service health.
@@ -273,7 +273,7 @@ Remote SSH has been tested successfully using mobile data outside the home LAN.
 - SSH connection tested successfully over mobile data
 - SSH public-key authentication verified
 - `ssh kingypinas` shortcut verified from the remote laptop
-
+- Remote SSH over Tailscale successfully tested from Germany & France
 
 ## Gluetun-dependent service recovery
 
